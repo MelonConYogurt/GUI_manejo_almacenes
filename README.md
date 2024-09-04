@@ -1,152 +1,120 @@
-Claro, aquí tienes un ejemplo de cómo podría estructurarse el archivo README para tu código, explicando sus funcionalidades principales:
 
 ---
-#Actulice algunos apartados y algunas vistas:
 
-#Pdf generados y abiertos automaticamente:
-![Screenshot 2024-09-04 175157](https://github.com/user-attachments/assets/8c0a723d-e840-46f8-b61f-3f3dff43dd6e)
+# Sistema de Inventario
 
+Este proyecto es un sistema de gestión de inventarios desarrollado en Python, utilizando **SQLAlchemy** para manejar la base de datos SQLite. El sistema permite gestionar productos, proveedores, clientes, ventas y productos seleccionados, ofreciendo funciones CRUD para todas estas entidades.
 
-#Vistas del inventario, las ventas, los clientes, etc:
-![Screenshot 2024-09-04 175307](https://github.com/user-attachments/assets/9593b6cb-b6e1-4c73-b99e-9b6a03ba45d8)
-![Screenshot 2024-09-04 175315](https://github.com/user-attachments/assets/5cbc7f49-f8dc-4053-ae6e-fe897cb4366b)
+## Actualizaciones Recientes
 
+### PDF generados y abiertos automáticamente:
+![Vista de PDF generados](https://github.com/user-attachments/assets/8c0a723d-e840-46f8-b61f-3f3dff43dd6e)
 
-#Graficos automaticos de la base de datos:
-![Screenshot 2024-09-04 175300](https://github.com/user-attachments/assets/7e3b7e38-353c-4269-a09a-a03783cc3878)
+### Vistas del inventario, ventas, clientes, etc.:
+![Vista del inventario](https://github.com/user-attachments/assets/9593b6cb-b6e1-4c73-b99e-9b6a03ba45d8)
+![Vista de ventas](https://github.com/user-attachments/assets/5cbc7f49-f8dc-4053-ae6e-fe897cb4366b)
 
+### Gráficos automáticos de la base de datos:
+![Vista de gráficos](https://github.com/user-attachments/assets/7e3b7e38-353c-4269-a09a-a03783cc3878)
 
-#Cambio de estilo general:
-![Screenshot 2024-09-04 175332](https://github.com/user-attachments/assets/a71aabef-4795-435e-91cd-e4e503973561)
+### Cambios en el estilo general:
+![Nuevo estilo de la interfaz](https://github.com/user-attachments/assets/a71aabef-4795-435e-91cd-e4e503973561)
 
+---
 
+## Modelo de Base de Datos
 
-# README
+### 1. **Cliente**
+   - Representa a los clientes.
+   - **Atributos**:
+     - `id`: Identificador único.
+     - `nombre`, `apellido`: Nombre y apellido.
+     - `cedula`: Documento de identidad.
+     - `correo`: Correo electrónico.
+     - `telefono`, `direccion`, `notas_adicionales`: Información de contacto.
 
-## Descripción del Proyecto
+### 2. **Venta**
+   - Información de las ventas realizadas.
+   - **Atributos**:
+     - `id`: Identificador único.
+     - `fecha_venta`: Fecha de la venta.
+     - `realizada_por`: Usuario que realizó la venta.
+     - `cliente_id`: Identificador del cliente.
+     - `porcentaje_iva`, `metodo_pago`, `metodo_envio`, `total_venta`: Detalles de la venta.
+     - `productos`: Productos vendidos.
 
-Este proyecto es una aplicación de gestión de productos y proveedores. Permite ingresar nuevos productos y proveedores en la base de datos, visualizar productos y proveedores existentes, filtrar productos por código o nombre, y generar facturas a partir de productos seleccionados.
+### 3. **Producto**
+   - Representa los productos en el inventario.
+   - **Atributos**:
+     - `id`, `nombre`, `codigo`: Identificación y nombre.
+     - `descripcion`, `categoria`, `marca`: Detalles del producto.
+     - `precio_compra`, `precio_venta`, `precio_mayorista`: Precios del producto.
+     - `cantidad_unidades`: Stock disponible.
+     - `temporada_producto`, `fecha_adquisicion`, `fecha_vencimiento`: Fechas relevantes.
+     - `fragilidad`, `tipo_producto`: Clasificación del producto.
+     - `proveedor_id`: Relación con el proveedor.
 
-## Funcionalidades
+### 4. **ProductoVendido**
+   - Almacena productos vendidos.
+   - **Atributos**:
+     - `id`, `producto_id`: Identificadores.
+     - `cantidad`, `precio_venta_unitario`: Detalles de la venta.
 
-### 1. **Obtener Datos del Producto Nuevo**
+### 5. **Proveedor**
+   - Información de los proveedores.
+   - **Atributos**:
+     - `id`, `nombre_contacto`, `nombre_empresa`: Información de contacto.
+     - `numero_proveedor`, `correo_proveedor`, `nit_empresa`: Información fiscal.
+     - `pagina_web`, `direccion_empresa`, `notas_adicionales`: Detalles adicionales.
 
-```python
-def obtener_datos_producto_nuevo(self):
-    ...
-```
+### 6. **ProductoSeleccionado**
+   - Productos seleccionados para una venta.
+   - **Atributos**:
+     - `id`, `producto_id`: Identificadores.
+     - `cantidad_unidades`, `tipo_precio`, `precio_venta`, `nombre`, `codigo`, `descuento`: Detalles del producto seleccionado.
 
-Esta función extrae los datos de un nuevo producto desde la interfaz gráfica de usuario (GUI). Los datos incluyen nombre, código, descripción, categoría, marca, precios (compra, venta y mayorista), cantidad de unidades, temporada, fechas de adquisición y vencimiento, fragilidad, tipo de producto y estado. Valida que los campos obligatorios no estén vacíos y que los campos numéricos sean válidos antes de agregar el producto a la base de datos.
+---
 
-### 2. **Obtener Datos del Proveedor Nuevo**
+## Funciones CRUD
 
-```python
-def obtener_datos_proveedor_nuevo(self):
-    ...
-```
+Todas las operaciones están decoradas con `manejar_excepcion_sqlalchemy` para manejar errores y realizar un rollback en caso de fallos.
 
-Extrae los datos de un nuevo proveedor desde la GUI, incluyendo nombre de contacto, nombre de la empresa, número de proveedor, correo electrónico, NIT, página web, dirección y notas adicionales. Valida que los campos obligatorios estén completos y que los campos numéricos sean válidos antes de agregar el proveedor a la base de datos.
+1. **agregar_producto**: Añade un nuevo producto.
+2. **agregar_proveedor**: Registra un proveedor.
+3. **agregar_cliente**: Añade un nuevo cliente.
+4. **agregar_producto_seleccionado**: Registra un producto para una venta.
+5. **agregar_venta**: Registra una venta completa.
+6. **eliminar_producto_por_id**: Elimina un producto por su ID.
+7. **agregar_producto_vendido**: Registra un producto vendido.
 
-### 3. **Obtener ID del Proveedor por Nombre**
+---
 
-```python
-def obtener_id_proveedor_por_nombre(self, nombre_empresa):
-    ...
-```
+## Uso
 
-Busca un proveedor en la base de datos utilizando el nombre de la empresa y devuelve su ID. Si no se encuentra ningún proveedor con ese nombre, devuelve `None`.
+1. Para crear la base de datos, ejecuta el archivo principal:
 
-### 4. **Generar Visualización de la Base de Datos**
+    ```bash
+    python nombre_del_archivo.py
+    ```
 
-```python
-def generar_visualizacion_db(self):
-    ...
-```
+2. Las funciones CRUD se pueden ejecutar de la siguiente forma:
 
-Crea y configura un `Treeview` para mostrar todos los productos en la base de datos. El `Treeview` incluye columnas para cada atributo del producto, como ID, nombre, código, descripción, categoría, marca, precios, cantidad, temporada, fechas, fragilidad, tipo, proveedor ID y estado.
+    ```python
+    agregar_producto("Laptop", 12345, "Laptop de alta gama", "Electrónica", "Dell", 1000, 1500, 1400, 50, "Primavera", datetime.now(), None, "Frágil", "Electrónico", 1, "Disponible")
+    ```
 
-### 5. **Filtrar Productos por Código**
-
-```python
-def filtrar_por_codigo(self):
-    ...
-```
-
-Filtra los productos mostrados en el `Treeview` según el código del producto ingresado en la GUI. Si el código no se proporciona, se filtra por nombre.
-
-### 6. **Filtrar Productos por Nombre**
-
-```python
-def filtrar_por_nombre(self):
-    ...
-```
-
-Filtra los productos mostrados en el `Treeview` según el nombre del producto ingresado en la GUI.
-
-### 7. **Restablecer Todos los Datos**
-
-```python
-def reestablecer_todos_los_datos(self):
-    ...
-```
-
-Elimina todos los datos del `Treeview` y vuelve a cargar todos los productos desde la base de datos.
-
-### 8. **Obtener Elemento Seleccionado**
-
-```python
-def obtener_elemento_seleccionado(self):
-    ...
-```
-
-Obtiene los datos del producto seleccionado en el `Treeview`, incluyendo cantidad, tipo de precio y descuento. Luego agrega el producto seleccionado con la cantidad y descuento especificados a la base de datos.
-
-### 9. **Generar Visualización de Productos Seleccionados**
-
-```python
-def generar_visualizacion_db_selecionados(self):
-    ...
-```
-
-Crea y configura un `Treeview` para mostrar los productos seleccionados, incluyendo columnas para ID, nombre, código, unidades, tipo de precio, precio de venta y descuento.
-
-### 10. **Actualizar Datos de Productos Seleccionados**
-
-```python
-def actualizar_datos_db_selecionados(self):
-    ...
-```
-
-Actualiza la visualización de los productos seleccionados en el `Treeview` con la información más reciente de la base de datos.
-
-### 11. **Eliminar Elemento Seleccionado**
-
-```python
-def eliminar_elemento_seleccionado(self):
-    ...
-```
-
-Elimina un producto seleccionado del `Treeview` y de la base de datos.
-
-### 12. **Crear Factura**
-
-```python
-def crear_factura(self):
-    ...
-```
-
-Crea una factura basada en los productos seleccionados en el `Treeview`, incluyendo datos como ID del producto, nombre, código, unidades, tipo de precio y descuento.
+---
 
 ## Requisitos
 
 - **Python 3.x**
-- **Tkinter** (para la GUI)
+- **Tkinter** (para la interfaz gráfica)
 - **SQLAlchemy** (para la gestión de la base de datos)
 
 ## Instalación
 
 1. Clona el repositorio.
-2. Instala las dependencias necesarias utilizando `pip`:
+2. Instala las dependencias:
 
     ```bash
     pip install -r requirements.txt
@@ -159,23 +127,20 @@ Crea una factura basada en los productos seleccionados en el `Treeview`, incluye
     ```
 
 ---
-## bases de datos sqllite con sqlalchemy:
 
-![Screenshot 2024-09-04 175211](https://github.com/user-attachments/assets/a499c55b-6a2d-4868-bbe3-1f6ede0d0cd2)
-![Screenshot 2024-09-04 175216](https://github.com/user-attachments/assets/08576857-aff8-4718-bb7c-ddb87da5a2f6)
+## Ejemplos de Bases de Datos en SQLite con SQLAlchemy:
 
+![Vista de bases de datos](https://github.com/user-attachments/assets/a499c55b-6a2d-4868-bbe3-1f6ede0d0cd2)
+![Ejemplo de bases de datos](https://github.com/user-attachments/assets/08576857-aff8-4718-bb7c-ddb87da5a2f6)
 
+---
 
+## API de Facturación:
 
-Asegúrate de ajustar el README según los detalles específicos de tu proyecto y de incluir información adicional según sea necesario.
+![Vista de la API de facturación](https://github.com/user-attachments/assets/05b0239e-d7cd-4488-9d38-3d80eb615a64)
 
+![Interfaz de la API](https://github.com/user-attachments/assets/5bafdd49-2ca3-4cd4-ba78-f1a8572afa50)
+![Vista adicional de la API](https://github.com/user-attachments/assets/6c652b5a-6d39-48d9-816a-b8788b2f000f)
 
-![Screenshot 2024-07-19 222533](https://github.com/user-attachments/assets/5bafdd49-2ca3-4cd4-ba78-f1a8572afa50)
-![Screenshot 2024-07-19 205725](https://github.com/user-attachments/assets/7c2543c0-e88e-4488-a224-21a44a26dfe4)
+---
 
-#Api de facturacion:
-![Screenshot 2024-07-22 220043](https://github.com/user-attachments/assets/05b0239e-d7cd-4488-9d38-3d80eb615a64)
-
-
-![Screenshot 2024-07-19 222938](https://github.com/user-attachments/assets/6c652b5a-6d39-48d9-816a-b8788b2f000f)
-![Screenshot 2024-07-19 205704](https://github.com/user-attachments/assets/294ca543-4fd4-4bc0-8174-3678b511e73b)
