@@ -1,6 +1,9 @@
 import customtkinter
+import customtkinter as ctk
 import os
 import time
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from CrearFactura import *
 from CTkPDFViewer import *
 from tkinter import *
@@ -194,15 +197,9 @@ class aplicacion(customtkinter.CTk):
         self.frame_Menu_contactos.grid_rowconfigure((0), weight=1, uniform='a')  
         self.frame_Menu_contactos.grid_columnconfigure((0), weight=1, uniform='a')
         #Frame Base contactos
-        self.frame_Menu_contactos_base = customtkinter.CTkFrame(master=self.frame_Menu_contactos, fg_color="#242424")
+        self.frame_Menu_contactos_base =  customtkinter.CTkScrollableFrame(master=self.frame_Menu_contactos, fg_color="#2b2b2b", orientation="horizontal")
         self.frame_Menu_contactos_base.grid(row=0, rowspan=1, column=0, columnspan=1, padx=1,  pady=1, sticky="nsew")
-        #
-        self.frame_Menu_contactos_base.grid_rowconfigure((0), weight=1, uniform ="a")  
-        self.frame_Menu_contactos_base.grid_columnconfigure((0), weight=1, uniform='a')
-        #
-        self.frame_Menu_contactos_barra_busqueda_n1 = customtkinter.CTkFrame(master=self.frame_Menu_contactos_base, fg_color="#2b2b2b")
-        self.frame_Menu_contactos_barra_busqueda_n1.grid(row=0, rowspan=2, column=0, columnspan=21, padx=5,  pady=5, sticky="nsew")
-   
+       
         
         #Frames para el menu de inventarios:
         self.frame_Menu_inventario.grid_rowconfigure((0), weight=1, uniform='a')  
@@ -1142,6 +1139,7 @@ class aplicacion(customtkinter.CTk):
         self.generar_visualizacion_proveedores()
         self.generar_visualizacion_db_selecionados()
         self.generar_visualizacion_db_inventario()
+        self.create_graphics()
     
     def Mostrar_menu_seleccionado(self, name):
         # set button color for selected button
@@ -1324,9 +1322,9 @@ class aplicacion(customtkinter.CTk):
     
     def generar_visualizacion_proveedores(self):
         # Configuración de colores y estilos para el Treeview
-        bg_color = self.frame_Menu_contactos_barra_busqueda_n1._apply_appearance_mode(customtkinter.ThemeManager.theme["CTkFrame"]["fg_color"])
-        text_color = self.frame_Menu_contactos_barra_busqueda_n1._apply_appearance_mode(customtkinter.ThemeManager.theme["CTkLabel"]["text_color"])
-        selected_color = self.frame_Menu_contactos_barra_busqueda_n1._apply_appearance_mode(customtkinter.ThemeManager.theme["CTkButton"]["fg_color"])
+        bg_color = self.frame_Menu_contactos_base._apply_appearance_mode(customtkinter.ThemeManager.theme["CTkFrame"]["fg_color"])
+        text_color = self.frame_Menu_contactos_base._apply_appearance_mode(customtkinter.ThemeManager.theme["CTkLabel"]["text_color"])
+        selected_color = self.frame_Menu_contactos_base._apply_appearance_mode(customtkinter.ThemeManager.theme["CTkButton"]["fg_color"])
         
         treestyle = ttk.Style()
         treestyle.theme_use('default')
@@ -1338,7 +1336,7 @@ class aplicacion(customtkinter.CTk):
         print(datos_proveedores)
         
         # Crear el Treeview
-        self.treeview_proveedores = ttk.Treeview(self.frame_Menu_contactos_barra_busqueda_n1, columns=(
+        self.treeview_proveedores = ttk.Treeview(self.frame_Menu_contactos_base, columns=(
             "ID", "Nombre Contacto", "Nombre Empresa", "Número Proveedor", 
             "Correo Proveedor", "NIT Empresa", "Página Web", "Dirección Empresa", 
             "Notas Adicionales"
@@ -1382,13 +1380,59 @@ class aplicacion(customtkinter.CTk):
         self.treeview_proveedores.column("Correo Proveedor", width=200, anchor="center")
         self.treeview_proveedores.column("NIT Empresa", width=120, anchor="center")
         self.treeview_proveedores.column("Página Web", width=150, anchor="center")
-        self.treeview_proveedores.column("Dirección Empresa", width=200, anchor="center")
-        self.treeview_proveedores.column("Notas Adicionales", width=200, anchor="center")
+        self.treeview_proveedores.column("Dirección Empresa", width=400, anchor="center")
+        self.treeview_proveedores.column("Notas Adicionales", width=600, anchor="center")
         
         # Empacar el Treeview
         self.treeview_proveedores.pack(fill="both", expand=True)
 
-    
+    def create_graphics(self):
+        # Gráfica 1: Total de ventas por día
+        ventas_por_dia = session.query(Venta.fecha_venta, Venta.total_venta).all()
+        fechas, totales = zip(*ventas_por_dia)
+        fig1, ax1 = plt.subplots()
+        ax1.plot(fechas, totales, label='Total Ventas')
+        ax1.set_title('Total de Ventas por Día')
+        ax1.set_xlabel('Fecha')
+        ax1.set_ylabel('Total Ventas')
+        ax1.grid(True)
+        self.display_graph(fig1, self.frame_Menu_analitica_N1)
+
+        # Gráfica 2: Productos más vendidos
+        productos_vendidos = session.query(ProductoVendido.producto_id, ProductoVendido.cantidad).all()
+        productos, cantidades = zip(*productos_vendidos)
+        fig2, ax2 = plt.subplots()
+        ax2.bar(productos, cantidades, label='Cantidad Vendida')
+        ax2.set_title('Productos Más Vendidos')
+        ax2.set_xlabel('ID Producto')
+        ax2.set_ylabel('Cantidad Vendida')
+        ax2.grid(True)
+        self.display_graph(fig2, self.frame_Menu_analitica_N2)
+
+        # Gráfica 3: Ventas por método de pago
+        ventas_metodo_pago = session.query(Venta.metodo_pago, Venta.total_venta).all()
+        metodos, totales_por_metodo = zip(*ventas_metodo_pago)
+        fig3, ax3 = plt.subplots()
+        ax3.pie(totales_por_metodo, labels=metodos, autopct='%1.1f%%', startangle=90)
+        ax3.set_title('Distribución de Ventas por Método de Pago')
+        ax3.axis('equal')
+        self.display_graph(fig3, self.frame_Menu_analitica_N3)
+
+        # Gráfica 4: Stock de productos por categoría
+        stock_por_categoria = session.query(Producto.categoria, Producto.cantidad_unidades).all()
+        categorias, stock = zip(*stock_por_categoria)
+        fig4, ax4 = plt.subplots()
+        ax4.barh(categorias, stock, label='Stock')
+        ax4.set_title('Stock de Productos por Categoría')
+        ax4.set_xlabel('Cantidad en Stock')
+        ax4.set_ylabel('Categoría')
+        ax4.grid(True)
+        self.display_graph(fig4, self.frame_Menu_analitica_N4)
+
+    def display_graph(self, fig, frame):
+        canvas = FigureCanvasTkAgg(fig, master=frame)
+        canvas.draw()
+        canvas.get_tk_widget().pack(fill='both', expand=True)
     
     def generar_visualizacion_db(self):
         
