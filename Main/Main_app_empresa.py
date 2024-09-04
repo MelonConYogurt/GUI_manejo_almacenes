@@ -87,43 +87,6 @@ class ToplevelWindow(customtkinter.CTkToplevel):
         super().__init__(*args, **kwargs)
         self.geometry("400x300")
    
-class panel_animado(customtkinter.CTkFrame):
-	def __init__(self, parent, posicion_inicial, posicion_final):
-		super().__init__(master = parent)
-
-		# general attributes 
-		self.posicion_inicial = posicion_inicial + 0.04
-		self.posicion_final = posicion_final - 0.005
-		self.width = abs(posicion_inicial - posicion_final)
-
-		# animation logic
-		self.posicion_actual = self.posicion_inicial
-		self.En_posicion_inicial = True
-
-		# layout
-		self.place(relx = self.posicion_inicial, rely = 0, relwidth = 0.2, relheight = 1)
-
-	def animacion(self):
-		if self.En_posicion_inicial:
-			self.animacion_hacia_adelante()
-		else:
-			self.animacion_hacia_atras()
-
-	def animacion_hacia_adelante(self):
-		if self.posicion_actual > self.posicion_final:
-			self.posicion_actual -= 0.01
-			self.place(relx = self.posicion_actual,  rely = 0, relwidth = 0.2, relheight = 1)
-			self.after(10, self.animacion_hacia_adelante)
-		else:
-			self.En_posicion_inicial = False
-
-	def animacion_hacia_atras(self):
-		if self.posicion_actual < self.posicion_inicial:
-			self.posicion_actual += 0.01
-			self.place(relx = self.posicion_actual,  rely = 0, relwidth = 0.2, relheight = 1)
-			self.after(10, self.animacion_hacia_atras)
-		else:
-			self.En_posicion_inicial = True
 
 class aplicacion(customtkinter.CTk):
     def __init__(self):
@@ -134,7 +97,7 @@ class aplicacion(customtkinter.CTk):
         self.minsize(1000,650)
         self.grid_rowconfigure(2, weight=1, uniform='a')  
         self.grid_columnconfigure(1, weight=1, uniform='a')
-        self.title("Diagramns")
+        self.title("Inventory")
         
         # Frame arriba menu:
         self.frame_menu_parte_alta = customtkinter.CTkFrame(master=self, width= 50, height= 50, fg_color="#2b2b2b")
@@ -154,7 +117,7 @@ class aplicacion(customtkinter.CTk):
         
         #Frames principales para los menus dentro del menu lateral:
         self.frame_Menu_inicio= customtkinter.CTkFrame(master=self.frame_Menu_base, fg_color="#242424")
-        self.frame_Menu_analitica = customtkinter.CTkFrame(master=self.frame_Menu_base, fg_color="#242424")
+        self.frame_Menu_analitica = customtkinter.CTkScrollableFrame(master=self.frame_Menu_base, fg_color="#242424", orientation="vertical")
         self.frame_Menu_contactos = customtkinter.CTkFrame(master=self.frame_Menu_base, fg_color="#242424")
         self.frame_Menu_inventario = customtkinter.CTkFrame(master=self.frame_Menu_base, fg_color="#242424")
         self.frame_Menu_catalogo = customtkinter.CTkFrame(master=self.frame_Menu_base, fg_color="#242424")
@@ -182,21 +145,43 @@ class aplicacion(customtkinter.CTk):
         self.frame_Menu_inicio_N4 = customtkinter.CTkFrame(master=self.frame_Menu_inicio, fg_color="#2b2b2b")
         self.frame_Menu_inicio_N4.grid(row=1, column=1, padx=5,  pady=5, sticky="nsew")
         
-        #Frames para el menu de analitica:
-        self.frame_Menu_analitica.grid_rowconfigure((0,1), weight=1, uniform='a')  
-        self.frame_Menu_analitica.grid_columnconfigure((0), weight=1, uniform='a')
-        #
-        self.frame_Menu_analitica_N1 = customtkinter.CTkScrollableFrame(master=self.frame_Menu_analitica, fg_color="#2b2b2b", orientation="horizontal")
-        self.frame_Menu_analitica_N1.grid(row=0, column=0, padx=5,  pady=5, sticky="nsew")
-        
-        self.frame_Menu_analitica_N2 = customtkinter.CTkScrollableFrame(master=self.frame_Menu_analitica, fg_color="#2b2b2b", orientation="horizontal")
-        self.frame_Menu_analitica_N2.grid(row=1, column=0, padx=5,  pady=5, sticky="nsew")
-        
-        self.frame_Menu_analitica_N3 = customtkinter.CTkScrollableFrame(master=self.frame_Menu_analitica, fg_color="#2b2b2b", orientation="horizontal")
-        self.frame_Menu_analitica_N3.grid(row=2, column=0, padx=5,  pady=5, sticky="nsew")
-        
-        self.frame_Menu_analitica_N4 = customtkinter.CTkScrollableFrame(master=self.frame_Menu_analitica, fg_color="#2b2b2b", orientation="horizontal")
-        self.frame_Menu_analitica_N4.grid(row=3, column=0, padx=5,  pady=5, sticky="nsew")
+        # Configurar el contenedor principal para que ocupe todo el espacio disponible
+        self.frame_Menu_analitica.grid_rowconfigure((0, 1, 2, 3), weight=1, uniform='a')
+        self.frame_Menu_analitica.grid_columnconfigure(0, weight=1, uniform='a')
+
+        # Crear los frames y colocarlos en la cuadrícula
+        self.frame_Menu_analitica_N1 = customtkinter.CTkScrollableFrame(
+            master=self.frame_Menu_analitica,
+            fg_color="#ffffff",
+            orientation="horizontal",
+            height=800  
+        )
+        self.frame_Menu_analitica_N1.grid(row=0, column=0, padx=5, pady=5, sticky="nsew")
+
+        self.frame_Menu_analitica_N2 = customtkinter.CTkScrollableFrame(
+            master=self.frame_Menu_analitica,
+            fg_color="#ffffff",
+            orientation="horizontal",
+            height=800 
+        )
+        self.frame_Menu_analitica_N2.grid(row=1, column=0, padx=5, pady=5, sticky="nsew")
+
+        self.frame_Menu_analitica_N3 = customtkinter.CTkScrollableFrame(
+            master=self.frame_Menu_analitica,
+            fg_color="#ffffff",
+            orientation="horizontal",
+            height=800  
+        )
+        self.frame_Menu_analitica_N3.grid(row=2, column=0, padx=5, pady=5, sticky="nsew")
+
+        self.frame_Menu_analitica_N4 = customtkinter.CTkScrollableFrame(
+            master=self.frame_Menu_analitica,
+            fg_color="#ffffff",
+            orientation="horizontal",
+            height=800  
+        )
+        self.frame_Menu_analitica_N4.grid(row=3, column=0, padx=5, pady=5, sticky="nsew")
+
         
         #Frames para el menu de contactanos:
         self.frame_Menu_contactos.grid_rowconfigure((0), weight=1, uniform='a')  
@@ -988,96 +973,8 @@ class aplicacion(customtkinter.CTk):
                                                             width=380, placeholder_text="Notas adiccionales")
         self.nota_empresa_proveedores.grid(row=0, column=0, padx=22, pady=12, sticky="nsew")
         #
-        #Paneles animados 
-        panel_configuracion_animado = panel_animado(self.frame_Menu_base, 1.0, 0.8)
-        panel_configuracion_animado.configure(fg_color="#777777")
-        #panel_configuracion_animado.grid_rowconfigure((0,1,3,4), weight=1, uniform='a')  
-        #panel_configuracion_animado.grid_columnconfigure((0,1), weight=1, uniform='a')
-        #
-        self.comentarios_jornada = customtkinter.CTkLabel(panel_configuracion_animado,
-                                                        text="Menu de configuracion")
-        self.comentarios_jornada.grid(row=0, column=0, padx=5, pady=5, sticky="nsew")
-        #  
-        self.enviar_reporte_boton = customtkinter.CTkButton(panel_configuracion_animado,  height=40, border_spacing=10, text="Vacio",
-                                                   fg_color="transparent", text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"),
-                                                   anchor="w", command=self)
-        self.enviar_reporte_boton.grid(row=1, column=0, padx=5, pady=5, sticky="nsew")
-        #
-        self.enviar_reporte_boton = customtkinter.CTkButton(panel_configuracion_animado,  height=40, border_spacing=10, text="Vacioo",
-                                                   fg_color="transparent", text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"),
-                                                   anchor="w", command=self)
-        self.enviar_reporte_boton.grid(row=2, column=0, padx=5, pady=5, sticky="nsew")
-        #
-        self.enviar_reporte_boton = customtkinter.CTkButton(panel_configuracion_animado,  height=40, border_spacing=10, text="Vacio",
-                                                   fg_color="transparent", text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"),
-                                                   anchor="w", command=self)
-        self.enviar_reporte_boton.grid(row=3, column=0, padx=5, pady=5, sticky="nsew")
-        #
-        self.enviar_reporte_boton = customtkinter.CTkButton(panel_configuracion_animado,  height=40, border_spacing=10, text="Vacio",
-                                                   fg_color="transparent", text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"),
-                                                   anchor="w", command=self)
-        self.enviar_reporte_boton.grid(row=4, column=0, padx=5, pady=5, sticky="nsew")
-        #
-        panel_jornada_animado = panel_animado(self.frame_Menu_base,  1.0, 0.8  )
-        panel_jornada_animado.configure(fg_color="#777777")
-        #panel_jornada_animado.grid_rowconfigure((0,1,3,4), weight=1, uniform='a')  
-        #panel_jornada_animado.grid_columnconfigure((0,1), weight=1, uniform='a')  
-        #
-        self.boton_inicio_jornada = customtkinter.CTkButton(panel_jornada_animado,  height=40, border_spacing=10, text="Iniciar jornada",
-                                                   fg_color="transparent", text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"),
-                                                   anchor="w", command=self)
-        self.boton_inicio_jornada.grid(row=0, column=0, padx=5, pady=5, sticky="nsew")
-        #
-        self.boton_finalizar_jornada = customtkinter.CTkButton(panel_jornada_animado,  height=40, border_spacing=10, text="Iniciar finalizar",
-                                                   fg_color="transparent", text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"),
-                                                   anchor="w", command=self)
-        self.boton_finalizar_jornada.grid(row=1, column=0, padx=5, pady=5, sticky="nsew")
-        #       
-        self.boton_detener_jornada = customtkinter.CTkButton(panel_jornada_animado,  height=40, border_spacing=10, text="Iniciar detener",
-                                                   fg_color="transparent", text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"),
-                                                   anchor="w", command=self)
-        self.boton_detener_jornada.grid(row=2, column=0, padx=5, pady=5, sticky="nsew")
-        #
-        self.comentarios_jornada = customtkinter.CTkLabel(panel_jornada_animado,
-                                                        text="Si tienes algun comentario:")
-        self.comentarios_jornada.grid(row=3, column=0, padx=5, pady=5, sticky="nsew")
-        #
-        self.entrada_comentarios= customtkinter.CTkTextbox(panel_jornada_animado)
-        self.entrada_comentarios.grid(row=4, column=0, padx=5, pady=5, sticky="nsew")
-        #       
-        self.enviar_comentario_boton = customtkinter.CTkButton(panel_jornada_animado,  height=40, border_spacing=10, text="Enviar comentario",
-                                                   fg_color="transparent", text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"),
-                                                   anchor="w", command=self)
-        self.enviar_comentario_boton.grid(row=5, column=0, padx=5, pady=5, sticky="nsew")
-        #
-        panel_reportes_animado = panel_animado(self.frame_Menu_base, 1.0, 0.8)
-        panel_reportes_animado.configure(fg_color="#777777")
-        #panel_reportes_animado.grid_rowconfigure((0,1,3,4), weight=1, uniform='a')  
-        #panel_reportes_animado.grid_columnconfigure((0,1), weight=1, uniform='a')  
-        #
-        self.titulo_comentario_reporte = customtkinter.CTkLabel(panel_reportes_animado,
-                                                        text="Si tienes algun comentario:")
-        self.titulo_comentario_reporte.grid(row=1, column=0, padx=5, pady=5, sticky="nsew")
-        #
-        self.entrada_comentarios_reporte= customtkinter.CTkTextbox(panel_reportes_animado)
-        self.entrada_comentarios_reporte.grid(row=2, column=0, padx=5, pady=5, sticky="nsew")
-        #
-        self.usuario_reporte = customtkinter.CTkEntry(panel_reportes_animado,
-                                                                         width=240, placeholder_text="Escribe tu nombre")
-        self.usuario_reporte.grid(row=3, column=0, padx=5, pady=5, sticky="nsew")
-        #       
-        self.enviar_reporte_boton = customtkinter.CTkButton(panel_reportes_animado,  height=40, border_spacing=10, text="Enviar comentario",
-                                                   fg_color="transparent", text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"),
-                                                   anchor="w", command=self)
-        self.enviar_reporte_boton.grid(row=4, column=0, padx=5, pady=5, sticky="nsew")
-        
-       
+      
         #Botones menu lateral:
-        self.Menu_inicio_boton = customtkinter.CTkButton(self.frame_menu,  height=40, border_spacing=10, text="Inicio",
-                                                   fg_color="transparent", text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"),
-                                                   anchor="w", command=self.Menu_inicio_evento)
-        self.Menu_inicio_boton.grid(row=0, column=0, padx=5, pady=5, sticky="nsew")
-        #
         self.Menu_analitica_boton = customtkinter.CTkButton(self.frame_menu, height=40, border_spacing=10, text="Analitica",
                                                    fg_color="transparent", text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"),
                                                    anchor="w", command=self.Menu_analitica_evento)
@@ -1092,17 +989,7 @@ class aplicacion(customtkinter.CTk):
                                                    fg_color="transparent", text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"),
                                                    anchor="w", command=self.Menu_inventario_evento)
         self.Menu_inventario_boton.grid(row=3, column=0, padx=5, pady=5, sticky="nsew")
-        #
-        # self.Menu_catalogo_boton = customtkinter.CTkButton(self.frame_menu,  height=40, border_spacing=10, text="Catalogos",
-        #                                            fg_color="transparent", text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"),
-        #                                            anchor="w", command=self.Menu_catalogo_evento)
-        # self.Menu_catalogo_boton.grid(row=4, column=0, padx=5, pady=5, sticky="nsew")
-        #
-        # self.Menu_tiendas_boton = customtkinter.CTkButton(self.frame_menu,  height=40, border_spacing=10, text="Tiendas",
-        #                                            fg_color="transparent", text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"),
-        #                                            anchor="w", command=self.Menu_tiendas_evento)
-        # self.Menu_tiendas_boton.grid(row=5, column=0, padx=5, pady=5, sticky="nsew")
-        #
+       
         self.Menu_ventas_boton = customtkinter.CTkButton(self.frame_menu,  height=40, border_spacing=10, text="Realizar venta",
                                                    fg_color="transparent", text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"),
                                                    anchor="w", command=self.Menu_ventas_evento)
@@ -1118,21 +1005,7 @@ class aplicacion(customtkinter.CTk):
                                                    fg_color="transparent", text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"),
                                                    anchor="w", command=self)
         self.titulo_app.grid(row=0, column=0, padx=5, pady=5, sticky="nsew")
-        #
-        self.Elemento_N1_menu_arriba = customtkinter.CTkButton(self.frame_menu_parte_alta,  height=40, border_spacing=10, text="Iniciar jornada",
-                                                   fg_color="transparent", text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"),
-                                                   anchor="w", command=panel_jornada_animado.animacion)
-        self.Elemento_N1_menu_arriba.grid(row=0, column=1, padx=5, pady=5, sticky="nsew")
-        #
-        self.Elemento_N2_menu_arriba = customtkinter.CTkButton(self.frame_menu_parte_alta,  height=40, border_spacing=10, text="Reportar inconveniente",
-                                                   fg_color="transparent", text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"),
-                                                   anchor="w", command=panel_reportes_animado.animacion)
-        self.Elemento_N2_menu_arriba.grid(row=0, column=2, padx=5, pady=5, sticky="nsew")
-        #
-        self.Elemento_N3_menu_arriba = customtkinter.CTkButton(self.frame_menu_parte_alta,  height=40, border_spacing=10, text="Configuracion",
-                                                   fg_color="transparent", text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"),
-                                                   anchor="w", command=panel_configuracion_animado.animacion)
-        self.Elemento_N3_menu_arriba.grid(row=0, column=5, padx=5, pady=5, sticky="nsew")
+       
     
         # Ejecutamos las funciones necesarias:
         self.Mostrar_menu_seleccionado("Menu_inicio")
@@ -1144,21 +1017,14 @@ class aplicacion(customtkinter.CTk):
     
     def Mostrar_menu_seleccionado(self, name):
         # set button color for selected button
-        self.Menu_inicio_boton.configure(fg_color=("gray75", "gray25") if name == "Menu_inicio" else "transparent")
         self.Menu_analitica_boton.configure(fg_color=("gray75", "gray25") if name == "Menu_analitica" else "transparent")
         self.Menu_contactos_boton.configure(fg_color=("gray75", "gray25") if name == "Menu_contactanos" else "transparent")
         self.Menu_inventario_boton.configure(fg_color=("gray75", "gray25") if name == "Menu_inventario" else "transparent")
-        # self.Menu_catalogo_boton.configure(fg_color=("gray75", "gray25") if name == "Menu_catalogo" else "transparent")
-        # self.Menu_tiendas_boton.configure(fg_color=("gray75", "gray25") if name == "Menu_tiendas" else "transparent")
         self.Menu_ventas_boton.configure(fg_color=("gray75", "gray25") if name == "Menu_ventas" else "transparent")
         self.Menu_vacio_N1_boton.configure(fg_color=("gray75", "gray25") if name == "Menu_vacio_N1" else "transparent")
         
         
         # show selected frame
-        if name == "Menu_inicio":
-            self.frame_Menu_inicio.grid(row=0, column=0, columnspan= 2, rowspan=2,  sticky="nsew")
-        else:
-            self.frame_Menu_inicio.grid_forget()
         if name == "Menu_analitica":
             self.frame_Menu_analitica.grid(row=0, column=0, columnspan= 2, rowspan=2,  sticky="nsew")
         else:
@@ -1171,14 +1037,6 @@ class aplicacion(customtkinter.CTk):
             self.frame_Menu_inventario.grid(row=0, column=0, columnspan= 2, rowspan=2,  sticky="nsew")
         else:
             self.frame_Menu_inventario.grid_forget()
-        if name == "Menu_catalogo":
-            self.frame_Menu_catalogo.grid(row=0, column=0, columnspan= 2, rowspan=2,  sticky="nsew")
-        else:
-            self.frame_Menu_catalogo.grid_forget()
-        if name == "Menu_tiendas":
-            self.frame_Menu_tiendas.grid(row=0, column=0, columnspan= 2, rowspan=2,  sticky="nsew")
-        else:
-            self.frame_Menu_tiendas.grid_forget()
         if name == "Menu_ventas":
             self.frame_Menu_ventas.grid(row=0, column=0, columnspan= 2, rowspan=2,  sticky="nsew")
         else:
@@ -1392,7 +1250,7 @@ class aplicacion(customtkinter.CTk):
         categorias_stock = session.query(Producto.categoria, func.sum(Producto.cantidad_unidades)).group_by(Producto.categoria).all()
         if categorias_stock:
             categorias, stock_por_categoria = zip(*categorias_stock)
-            fig1, ax1 = plt.subplots()
+            fig1, ax1 = plt.subplots(figsize=(16, 5))
             ax1.bar(categorias, stock_por_categoria, color='skyblue')
             ax1.set_title('Stock de Productos por Categoría')
             ax1.set_xlabel('Categoría')
@@ -1406,7 +1264,7 @@ class aplicacion(customtkinter.CTk):
         tipos_precios = session.query(Producto.tipo_producto, func.avg(Producto.precio_venta)).group_by(Producto.tipo_producto).all()
         if tipos_precios:
             tipos, precios_promedio = zip(*tipos_precios)
-            fig2, ax2 = plt.subplots()
+            fig2, ax2 = plt.subplots(figsize=(16, 5))
             ax2.bar(tipos, precios_promedio, color='lightcoral')
             ax2.set_title('Precios Promedio de Productos por Tipo')
             ax2.set_xlabel('Tipo de Producto')
@@ -1420,7 +1278,7 @@ class aplicacion(customtkinter.CTk):
         productos_ventas = session.query(Producto.id, func.sum(ProductoVendido.cantidad * ProductoVendido.precio_venta_unitario)).join(ProductoVendido, Producto.id == ProductoVendido.producto_id).group_by(Producto.id).all()
         if productos_ventas:
             ids_productos, ventas_totales = zip(*productos_ventas)
-            fig3, ax3 = plt.subplots()
+            fig3, ax3 = plt.subplots(figsize=(16, 5))
             ax3.bar(ids_productos, ventas_totales, color='seagreen')
             ax3.set_title('Ventas Totales por Producto')
             ax3.set_xlabel('ID Producto')
@@ -1434,7 +1292,7 @@ class aplicacion(customtkinter.CTk):
         productos_precios = session.query(Producto.nombre, Producto.precio_compra, Producto.precio_venta).all()
         if productos_precios:
             nombres, precios_compra, precios_venta = zip(*productos_precios)
-            fig4, ax4 = plt.subplots()
+            fig4, ax4 = plt.subplots(figsize=(20, 5))
             ax4.plot(nombres, precios_compra, 'o-', label='Precio de Compra', color='orange')
             ax4.plot(nombres, precios_venta, 's-', label='Precio de Venta', color='purple')
             ax4.set_title('Precio de Compra vs. Precio de Venta por Producto')
