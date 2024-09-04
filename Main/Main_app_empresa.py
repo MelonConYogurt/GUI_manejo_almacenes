@@ -1,22 +1,20 @@
 import customtkinter
-import shutil
-import subprocess
-import threading
-from Main.CrearFactura import *
-from Main.CTkPDFViewer import *
+import os
+import time
+from CrearFactura import *
+from CTkPDFViewer import *
 from tkinter import *
-from tkinter import filedialog
 from tkinter import ttk
-from Main.CTkXYFrame import *
-from Main.CTkToolTip import *
+from CTkXYFrame import *
+from CTkToolTip import *
 from datetime import datetime, timedelta
-from Main.CrearFactura.invoice_generator import *
+from CrearFactura.invoice_generator import *
 from tkinter import messagebox
 from typing import Union, Callable
-from Main.CTkScrollableDropdown import *
-from Main.CTkPopupKeyboard import PopupNumpad
-from Main.Crud_Base_Datos import * 
-from Main.BaseDeDatosInventario import Producto, Proveedor, session
+from CTkScrollableDropdown import *
+from CTkPopupKeyboard import PopupNumpad
+from Crud_Base_Datos import * 
+from BaseDeDatosInventario import Producto, Proveedor, session
 
 class frame_seleccion_nuemeros(customtkinter.CTkFrame):
     def __init__(self, *args,
@@ -134,13 +132,13 @@ class aplicacion(customtkinter.CTk):
         self.title("Diagramns")
         
         # Frame arriba menu:
-        self.frame_menu_parte_alta = customtkinter.CTkFrame(master=self, width= 50, height= 50, fg_color="#1f6aa5")
+        self.frame_menu_parte_alta = customtkinter.CTkFrame(master=self, width= 50, height= 50, fg_color="#2b2b2b")
         self.frame_menu_parte_alta.grid(row=0, column=0, columnspan=2, padx=5, pady=5, sticky="nsew")
         #Configuramos el grid:
         self.frame_menu_parte_alta.grid_columnconfigure((0,1,2,3,4,5), weight=1, uniform='a')
     
         # Frames barra de menú:
-        self.frame_menu = customtkinter.CTkFrame(master=self, fg_color="#1f6aa5")
+        self.frame_menu = customtkinter.CTkFrame(master=self, fg_color="#2b2b2b")
         self.frame_menu.grid(row=1, column=0, padx=5, rowspan=2, pady=5, sticky="nsew")
         #Frame base para todo el inicio
         self.frame_Menu_base= customtkinter.CTkFrame(master=self, fg_color="transparent") 
@@ -213,17 +211,6 @@ class aplicacion(customtkinter.CTk):
         #
         self.frame_para_proveedores_detalles = customtkinter.CTkFrame(master=self.frame_Menu_contactos_proveedores_db_BASE, fg_color="white")
         self.frame_para_proveedores_detalles.grid(row=0, rowspan=1, column=1, columnspan=1, padx=5,  pady=5, sticky="nsew")
-        
-        #
-        """self.frame_Menu_contactos_barra_busqueda_n2 = customtkinter.CTkFrame(master=self.frame_Menu_contactos_base, fg_color="#2b2b2b")
-        self.frame_Menu_contactos_barra_busqueda_n2.grid(row=2, rowspan=1, column=0, columnspan=21, padx=5,  pady=5, sticky="nsew")
-        #
-        self.frame_Menu_contactos_clientes_db = customtkinter.CTkFrame(master=self.frame_Menu_contactos_base, fg_color="#2b2b2b")
-        self.frame_Menu_contactos_clientes_db.grid(row=3, rowspan=1, column=0, columnspan=14, padx=5,  pady=5, sticky="nsew")
-        #
-        self.frame_Menu_contactos_clientes_detalles = customtkinter.CTkFrame(master=self.frame_Menu_contactos_base, fg_color="#2b2b2b")
-        self.frame_Menu_contactos_clientes_detalles.grid(row=3, rowspan=1, column=14, columnspan=7, padx=5,  pady=5, sticky="nsew")"""
-
         
         #Frames para el menu de inventarios:
         self.frame_Menu_inventario.grid_rowconfigure((0,1), weight=1, uniform='a')  
@@ -353,8 +340,6 @@ class aplicacion(customtkinter.CTk):
         self.frame_factura_10 = customtkinter.CTkFrame(master=self.frame_factura, fg_color="#2b2b2b", )
         self.frame_factura_10.grid(row=4, column=1, columnspan=1, padx=5,  pady=5, sticky="nsew")
         #
-        #self.frame_factura_11 = customtkinter.CTkFrame(master=self.frame_factura, fg_color="#2b2b2b", )
-        #self.frame_factura_11.grid(row=5, column=1, columnspan=1, padx=5,  pady=5, sticky="nsew")
        
         #Frames barra de busqueda
         self.busqueda_frame_1 = customtkinter.CTkFrame(master=self.frame_Menu_ventas_N1, fg_color="#2b2b2b", )
@@ -1876,33 +1861,20 @@ class aplicacion(customtkinter.CTk):
                 )
 
             # Genera la factura en un archivo PDF
-            TituloFactura = f"ven_entorno_virtual\Main\Facturas\Factura_{nombre_del_cliente}.pdf"
+            TituloFactura = f"Main\Facturas\Factura_{nombre_del_cliente}.pdf"
             factura.download(TituloFactura)
+            self.VerFactura(TituloFactura)
 
         except Exception as e:
                 print(e)
                          
     def VerFactura(self, ruta_pdf):
-        # Comando para abrir el archivo PDF con el visor de PDF predeterminado en Windows
-        comando = ["start", ruta_pdf]
-
-        # Crear el proceso y establecer un tiempo de espera (timeout) de 10 segundos
-        proceso = subprocess.Popen(comando, shell=True)
-
         try:
-            proceso.communicate(timeout=5)  # Establecer un tiempo de espera de 10 segundos
-        except subprocess.TimeoutExpired:
-            print("El proceso excedió el tiempo de espera.")
-        
-        """try:
-            toplevel = ToplevelWindow(self)
-            pdf_frame = CTkPDFViewer(toplevel, file=ubicasion)
-            pdf_frame.pack(fill="both", expand=True, padx=10, pady=10)
-            toplevel.focus()
+            time.sleep(5)
+            os.startfile(ruta_pdf)
         except Exception as e:
-            print(e)"""
-
-        
+            print(e)
+   
         
 if __name__ == "__main__":
     aplicacion = aplicacion()

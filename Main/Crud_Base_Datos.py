@@ -1,4 +1,4 @@
-from Main.BaseDeDatosInventario import Producto, Proveedor, Cliente, Venta, ProductoVendido, session, ProductoSelecionado
+from BaseDeDatosInventario import Producto, Proveedor, Cliente, Venta, ProductoVendido, session, ProductoSelecionado
 from sqlalchemy.exc import SQLAlchemyError
 from datetime import datetime
 
@@ -96,6 +96,9 @@ def agregar_venta(cliente_id, realizada_por, metodo_pago ,metodo_envio ,total_ve
 @manejar_excepcion_sqlalchemy
 def eliminar_producto_por_id(id_producto):
     producto = session.query(ProductoSelecionado).filter_by(producto_id=id_producto).one()
+    print()
+    print(producto)
+    print()
     session.delete(producto)
 
 @manejar_excepcion_sqlalchemy
@@ -108,5 +111,11 @@ def agregar_producto_vendido(producto_id, cantidad, precio_venta_unitario):
     session.add(producto_vendido)
 
 
-    
-    
+if __name__ == "__main__":
+    try:
+        eliminar_producto_por_id(2)
+        eliminar_producto_por_id(4)
+        eliminar_producto_por_id(7)
+        eliminar_producto_por_id(8)
+    except Exception as e:
+        print(e)

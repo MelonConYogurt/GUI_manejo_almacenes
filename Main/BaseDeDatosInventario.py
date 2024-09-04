@@ -5,7 +5,7 @@ from datetime import datetime
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-engine = create_engine('sqlite:///ven_entorno_virtual/Main/Inventario.db', echo=True)
+engine = create_engine('sqlite:///Main/Inventario.db', echo=True)
 Base = declarative_base()
 
 class Cliente(Base):
