@@ -194,36 +194,23 @@ class aplicacion(customtkinter.CTk):
         self.frame_Menu_contactos.grid_rowconfigure((0), weight=1, uniform='a')  
         self.frame_Menu_contactos.grid_columnconfigure((0), weight=1, uniform='a')
         #Frame Base contactos
-        self.frame_Menu_contactos_base = customtkinter.CTkFrame(master=self.frame_Menu_contactos, fg_color="red")
+        self.frame_Menu_contactos_base = customtkinter.CTkFrame(master=self.frame_Menu_contactos, fg_color="#242424")
         self.frame_Menu_contactos_base.grid(row=0, rowspan=1, column=0, columnspan=1, padx=1,  pady=1, sticky="nsew")
         #
-        self.frame_Menu_contactos_base.grid_rowconfigure((0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35), weight=1, uniform ="a")  
-        self.frame_Menu_contactos_base.grid_columnconfigure((0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20), weight=1, uniform='a')
+        self.frame_Menu_contactos_base.grid_rowconfigure((0), weight=1, uniform ="a")  
+        self.frame_Menu_contactos_base.grid_columnconfigure((0), weight=1, uniform='a')
         #
         self.frame_Menu_contactos_barra_busqueda_n1 = customtkinter.CTkFrame(master=self.frame_Menu_contactos_base, fg_color="#2b2b2b")
         self.frame_Menu_contactos_barra_busqueda_n1.grid(row=0, rowspan=2, column=0, columnspan=21, padx=5,  pady=5, sticky="nsew")
-        #
-        self.frame_Menu_contactos_proveedores_db_BASE = customtkinter.CTkFrame(master=self.frame_Menu_contactos_base, fg_color="#2b2b2b")
-        self.frame_Menu_contactos_proveedores_db_BASE.grid(row=2, rowspan=10, column=0, columnspan=21, padx=5,  pady=5, sticky="nsew")
-        #
-        self.frame_para_proveedores = customtkinter.CTkFrame(master=self.frame_Menu_contactos_proveedores_db_BASE, fg_color="white")
-        self.frame_para_proveedores.grid(row=0, rowspan=1, column=0, columnspan=1, padx=5,  pady=5, sticky="nsew")
-        #
-        self.frame_para_proveedores_detalles = customtkinter.CTkFrame(master=self.frame_Menu_contactos_proveedores_db_BASE, fg_color="white")
-        self.frame_para_proveedores_detalles.grid(row=0, rowspan=1, column=1, columnspan=1, padx=5,  pady=5, sticky="nsew")
+   
         
         #Frames para el menu de inventarios:
-        self.frame_Menu_inventario.grid_rowconfigure((0,1), weight=1, uniform='a')  
-        self.frame_Menu_inventario.grid_columnconfigure((0,1), weight=1, uniform='a')
+        self.frame_Menu_inventario.grid_rowconfigure((0), weight=1, uniform='a')  
+        self.frame_Menu_inventario.grid_columnconfigure((0), weight=1, uniform='a')
         #
-        self.frame_Menu_inventario_N1 = customtkinter.CTkFrame(master=self.frame_Menu_inventario, fg_color="#2b2b2b")
+        self.frame_Menu_inventario_N1 =  customtkinter.CTkScrollableFrame(master=self.frame_Menu_inventario, fg_color="#2b2b2b", orientation="horizontal")
         self.frame_Menu_inventario_N1.grid(row=0, column=0, padx=5,  pady=5, sticky="nsew")
-        self.frame_Menu_inventario_N2 = customtkinter.CTkFrame(master=self.frame_Menu_inventario, fg_color="#2b2b2b")
-        self.frame_Menu_inventario_N2.grid(row=1, column=0, padx=5,  pady=5, sticky="nsew")
-        self.frame_Menu_inventario_N3 = customtkinter.CTkFrame(master=self.frame_Menu_inventario, fg_color="#2b2b2b")
-        self.frame_Menu_inventario_N3.grid(row=0, column=1, padx=5,  pady=5, sticky="nsew")
-        self.frame_Menu_inventario_N4 = customtkinter.CTkFrame(master=self.frame_Menu_inventario, fg_color="#2b2b2b")
-        self.frame_Menu_inventario_N4.grid(row=1, column=1, padx=5,  pady=5, sticky="nsew")
+       
         
         #Frames para el menu de catalogo:
         self.frame_Menu_catalogo.grid_rowconfigure((0,1), weight=1, uniform='a')  
@@ -1108,15 +1095,15 @@ class aplicacion(customtkinter.CTk):
                                                    anchor="w", command=self.Menu_inventario_evento)
         self.Menu_inventario_boton.grid(row=3, column=0, padx=5, pady=5, sticky="nsew")
         #
-        self.Menu_catalogo_boton = customtkinter.CTkButton(self.frame_menu,  height=40, border_spacing=10, text="Catalogos",
-                                                   fg_color="transparent", text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"),
-                                                   anchor="w", command=self.Menu_catalogo_evento)
-        self.Menu_catalogo_boton.grid(row=4, column=0, padx=5, pady=5, sticky="nsew")
+        # self.Menu_catalogo_boton = customtkinter.CTkButton(self.frame_menu,  height=40, border_spacing=10, text="Catalogos",
+        #                                            fg_color="transparent", text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"),
+        #                                            anchor="w", command=self.Menu_catalogo_evento)
+        # self.Menu_catalogo_boton.grid(row=4, column=0, padx=5, pady=5, sticky="nsew")
         #
-        self.Menu_tiendas_boton = customtkinter.CTkButton(self.frame_menu,  height=40, border_spacing=10, text="Tiendas",
-                                                   fg_color="transparent", text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"),
-                                                   anchor="w", command=self.Menu_tiendas_evento)
-        self.Menu_tiendas_boton.grid(row=5, column=0, padx=5, pady=5, sticky="nsew")
+        # self.Menu_tiendas_boton = customtkinter.CTkButton(self.frame_menu,  height=40, border_spacing=10, text="Tiendas",
+        #                                            fg_color="transparent", text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"),
+        #                                            anchor="w", command=self.Menu_tiendas_evento)
+        # self.Menu_tiendas_boton.grid(row=5, column=0, padx=5, pady=5, sticky="nsew")
         #
         self.Menu_ventas_boton = customtkinter.CTkButton(self.frame_menu,  height=40, border_spacing=10, text="Realizar venta",
                                                    fg_color="transparent", text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"),
@@ -1152,7 +1139,9 @@ class aplicacion(customtkinter.CTk):
         # Ejecutamos las funciones necesarias:
         self.Mostrar_menu_seleccionado("Menu_inicio")
         self.generar_visualizacion_db()
+        self.generar_visualizacion_proveedores()
         self.generar_visualizacion_db_selecionados()
+        self.generar_visualizacion_db_inventario()
     
     def Mostrar_menu_seleccionado(self, name):
         # set button color for selected button
@@ -1160,8 +1149,8 @@ class aplicacion(customtkinter.CTk):
         self.Menu_analitica_boton.configure(fg_color=("gray75", "gray25") if name == "Menu_analitica" else "transparent")
         self.Menu_contactos_boton.configure(fg_color=("gray75", "gray25") if name == "Menu_contactanos" else "transparent")
         self.Menu_inventario_boton.configure(fg_color=("gray75", "gray25") if name == "Menu_inventario" else "transparent")
-        self.Menu_catalogo_boton.configure(fg_color=("gray75", "gray25") if name == "Menu_catalogo" else "transparent")
-        self.Menu_tiendas_boton.configure(fg_color=("gray75", "gray25") if name == "Menu_tiendas" else "transparent")
+        # self.Menu_catalogo_boton.configure(fg_color=("gray75", "gray25") if name == "Menu_catalogo" else "transparent")
+        # self.Menu_tiendas_boton.configure(fg_color=("gray75", "gray25") if name == "Menu_tiendas" else "transparent")
         self.Menu_ventas_boton.configure(fg_color=("gray75", "gray25") if name == "Menu_ventas" else "transparent")
         self.Menu_vacio_N1_boton.configure(fg_color=("gray75", "gray25") if name == "Menu_vacio_N1" else "transparent")
         
@@ -1333,6 +1322,74 @@ class aplicacion(customtkinter.CTk):
             print(f"Error al buscar proveedor: {e}")
             return None
     
+    def generar_visualizacion_proveedores(self):
+        # Configuración de colores y estilos para el Treeview
+        bg_color = self.frame_Menu_contactos_barra_busqueda_n1._apply_appearance_mode(customtkinter.ThemeManager.theme["CTkFrame"]["fg_color"])
+        text_color = self.frame_Menu_contactos_barra_busqueda_n1._apply_appearance_mode(customtkinter.ThemeManager.theme["CTkLabel"]["text_color"])
+        selected_color = self.frame_Menu_contactos_barra_busqueda_n1._apply_appearance_mode(customtkinter.ThemeManager.theme["CTkButton"]["fg_color"])
+        
+        treestyle = ttk.Style()
+        treestyle.theme_use('default')
+        treestyle.configure("Treeview", background=bg_color, foreground=text_color, fieldbackground=bg_color, borderwidth=0 , rowheight=40)
+        treestyle.map('Treeview', background=[('selected', bg_color)], foreground=[('selected', selected_color)])
+        
+        # Extraemos la data de la tabla de proveedores usando SQLAlchemy
+        datos_proveedores = session.query(Proveedor).all()
+        print(datos_proveedores)
+        
+        # Crear el Treeview
+        self.treeview_proveedores = ttk.Treeview(self.frame_Menu_contactos_barra_busqueda_n1, columns=(
+            "ID", "Nombre Contacto", "Nombre Empresa", "Número Proveedor", 
+            "Correo Proveedor", "NIT Empresa", "Página Web", "Dirección Empresa", 
+            "Notas Adicionales"
+        ), show="headings")
+
+        # Configurar los encabezados de las columnas
+        self.treeview_proveedores.heading("ID", text="ID")
+        self.treeview_proveedores.heading("Nombre Contacto", text="Nombre Contacto")
+        self.treeview_proveedores.heading("Nombre Empresa", text="Nombre Empresa")
+        self.treeview_proveedores.heading("Número Proveedor", text="Número Proveedor")
+        self.treeview_proveedores.heading("Correo Proveedor", text="Correo Proveedor")
+        self.treeview_proveedores.heading("NIT Empresa", text="NIT Empresa")
+        self.treeview_proveedores.heading("Página Web", text="Página Web")
+        self.treeview_proveedores.heading("Dirección Empresa", text="Dirección Empresa")
+        self.treeview_proveedores.heading("Notas Adicionales", text="Notas Adicionales")
+
+        # Limpiar cualquier dato previo en el Treeview
+        for fila in self.treeview_proveedores.get_children():
+            self.treeview_proveedores.delete(fila)
+
+        # Llenar el Treeview con los datos de los proveedores
+        for proveedor in datos_proveedores:
+            valores = (
+                proveedor.id,
+                proveedor.nombre_contacto,
+                proveedor.nombre_empresa,
+                proveedor.numero_proveedor,
+                proveedor.correo_proveedor,
+                proveedor.nit_empresa,
+                proveedor.pagina_web,
+                proveedor.direccion_empresa,
+                proveedor.notas_adicionales
+            )
+            self.treeview_proveedores.insert("", "end", values=valores)    
+            
+        # Establecer anchos específicos para cada columna (en píxeles)
+        self.treeview_proveedores.column("ID", width=25,  anchor="center")
+        self.treeview_proveedores.column("Nombre Contacto", width=160, anchor="center")
+        self.treeview_proveedores.column("Nombre Empresa", width=160, anchor="center")
+        self.treeview_proveedores.column("Número Proveedor", width=120, anchor="center")
+        self.treeview_proveedores.column("Correo Proveedor", width=200, anchor="center")
+        self.treeview_proveedores.column("NIT Empresa", width=120, anchor="center")
+        self.treeview_proveedores.column("Página Web", width=150, anchor="center")
+        self.treeview_proveedores.column("Dirección Empresa", width=200, anchor="center")
+        self.treeview_proveedores.column("Notas Adicionales", width=200, anchor="center")
+        
+        # Empacar el Treeview
+        self.treeview_proveedores.pack(fill="both", expand=True)
+
+    
+    
     def generar_visualizacion_db(self):
         
         # Configuración de colores y estilos para el Treeview
@@ -1343,7 +1400,7 @@ class aplicacion(customtkinter.CTk):
         
         treestyle = ttk.Style()
         treestyle.theme_use('default')
-        treestyle.configure("Treeview", background=bg_color, foreground=text_color, fieldbackground=bg_color, borderwidth=0)
+        treestyle.configure("Treeview", background=bg_color, foreground=text_color, fieldbackground=bg_color, borderwidth=0 , rowheight=35)
         treestyle.map('Treeview', background=[('selected', bg_color)], foreground=[('selected', selected_color)])
         
         # Extraemos la data de la tabla de productos usando SQLAlchemy
@@ -1426,7 +1483,102 @@ class aplicacion(customtkinter.CTk):
         
         # Empacar el Treeview
         self.treeview.pack(fill="both", expand=True)
+    
+    def generar_visualizacion_db_inventario(self):
         
+        # Configuración de colores y estilos para el Treeview
+        bg_color = self.frame_database_scroll._apply_appearance_mode(customtkinter.ThemeManager.theme["CTkFrame"]["fg_color"])
+        text_color = self.frame_database_scroll._apply_appearance_mode(customtkinter.ThemeManager.theme["CTkLabel"]["text_color"])
+        selected_color = self.frame_database_scroll._apply_appearance_mode(customtkinter.ThemeManager.theme["CTkButton"]["fg_color"])
+        
+        
+        treestyle = ttk.Style()
+        treestyle.theme_use('default')
+        treestyle.configure("Treeview", background=bg_color, foreground=text_color, fieldbackground=bg_color, borderwidth=0 , rowheight=35)
+        treestyle.map('Treeview', background=[('selected', bg_color)], foreground=[('selected', selected_color)])
+        
+        # Extraemos la data de la tabla de productos usando SQLAlchemy
+        datos = session.query(Producto).all()
+        
+        # Crear el Treeview
+        self.treeview = ttk.Treeview(self.frame_Menu_inventario_N1, columns=(
+            "ID", "Nombre", "Código", "Descripción", "Categoría",
+            "Marca", "Precio Compra", "Precio Venta", "Precio Mayorista",
+            "Cantidad Unidades", "Temporada Producto", "Fecha Adquisición",
+            "Fecha Vencimiento", "Fragilidad", "Tipo Producto", "Proveedor ID",
+            "Estado"
+        ), show="headings")
+
+        # Configurar los encabezados de las columnas
+        self.treeview.heading("ID", text="ID")
+        self.treeview.heading("Nombre", text="Nombre")
+        self.treeview.heading("Código", text="Código")
+        self.treeview.heading("Descripción", text="Descripción")
+        self.treeview.heading("Categoría", text="Categoría")
+        self.treeview.heading("Marca", text="Marca")
+        self.treeview.heading("Precio Compra", text="Precio Compra")
+        self.treeview.heading("Precio Venta", text="Precio Venta")
+        self.treeview.heading("Precio Mayorista", text="Precio Mayorista")
+        self.treeview.heading("Cantidad Unidades", text="Cantidad Unidades")
+        self.treeview.heading("Temporada Producto", text="Temporada Producto")
+        self.treeview.heading("Fecha Adquisición", text="Fecha Adquisición")
+        self.treeview.heading("Fecha Vencimiento", text="Fecha Vencimiento")
+        self.treeview.heading("Fragilidad", text="Fragilidad")
+        self.treeview.heading("Tipo Producto", text="Tipo Producto")
+        self.treeview.heading("Proveedor ID", text="Proveedor ID")
+        self.treeview.heading("Estado", text="Estado")
+
+        # Limpiar cualquier dato previo en el Treeview
+        for fila in self.treeview.get_children():
+            self.treeview.delete(fila)
+
+        # Llenar el Treeview con los datos
+        for dato in datos:
+            # Crear una tupla con los atributos del objeto Producto en el orden deseado
+            valores = (
+                dato.id,
+                dato.nombre,
+                dato.codigo,
+                dato.descripcion,
+                dato.categoria,
+                dato.marca,
+                dato.precio_compra,
+                dato.precio_venta,
+                dato.precio_mayorista,
+                dato.cantidad_unidades,
+                dato.temporada_producto,
+                dato.fecha_adquisicion,  
+                dato.fecha_vencimiento,  
+                dato.fragilidad,
+                dato.tipo_producto,
+                dato.proveedor_id,
+                dato.estado
+            )
+            self.treeview.insert("", "end", values=valores)    
+        
+        # Establecer anchos específicos para cada columna (en píxeles)
+        self.treeview.column("ID", width=25, anchor="center")
+        self.treeview.column("Nombre", width=160, anchor="center")
+        self.treeview.column("Código", width=90, anchor="center")
+        self.treeview.column("Descripción", width=200, anchor="center")
+        self.treeview.column("Categoría", width=90, anchor="center")
+        self.treeview.column("Marca", width=90, anchor="center")
+        self.treeview.column("Precio Compra", width=100, anchor="center")
+        self.treeview.column("Precio Venta", width=100, anchor="center")
+        self.treeview.column("Precio Mayorista", width=100, anchor="center")
+        self.treeview.column("Cantidad Unidades", width=110, anchor="center")
+        self.treeview.column("Temporada Producto", width=120, anchor="center")
+        self.treeview.column("Fecha Adquisición", width=110, anchor="center")
+        self.treeview.column("Fecha Vencimiento", width=110, anchor="center")
+        self.treeview.column("Fragilidad", width=100, anchor="center")
+        self.treeview.column("Tipo Producto", width=100, anchor="center")
+        self.treeview.column("Proveedor ID", width=100, anchor="center")
+        self.treeview.column("Estado", width=70, anchor="center")
+        
+        # Empacar el Treeview
+        self.treeview.pack(fill="both", expand=True)
+    
+    
     def filtrar_por_codigo(self):
         try:
             #Obtenemos el codigo del entry
@@ -1841,7 +1993,7 @@ class aplicacion(customtkinter.CTk):
             factura = InvoiceGenerator(
                 sender="Nombre empresa, XXXX.",
                 to=nombre_del_cliente,
-                logo="https://i.ibb.co/VL3y4dd/Screenshot-2023-10-12-193505.png",
+                logo="https://avatars.githubusercontent.com/u/141779507?v=4",
                 number=000000,
                 notes= info_empresa,
                 shipping=000000,
