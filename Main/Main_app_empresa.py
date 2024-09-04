@@ -1215,6 +1215,73 @@ class aplicacion(customtkinter.CTk):
         # Empacar el Treeview
         self.treeview_proveedores.pack(fill="both", expand=True)
 
+    def generar_visualizacion_producto_vendidos(self):
+        # Configuración de colores y estilos para el Treeview
+        bg_color = self.frame_Menu_contactos_base._apply_appearance_mode(customtkinter.ThemeManager.theme["CTkFrame"]["fg_color"])
+        text_color = self.frame_Menu_contactos_base._apply_appearance_mode(customtkinter.ThemeManager.theme["CTkLabel"]["text_color"])
+        selected_color = self.frame_Menu_contactos_base._apply_appearance_mode(customtkinter.ThemeManager.theme["CTkButton"]["fg_color"])
+        
+        treestyle = ttk.Style()
+        treestyle.theme_use('default')
+        treestyle.configure("Treeview", background=bg_color, foreground=text_color, fieldbackground=bg_color, borderwidth=0 , rowheight=40)
+        treestyle.map('Treeview', background=[('selected', bg_color)], foreground=[('selected', selected_color)])
+        
+        # Extraemos la data de la tabla de proveedores usando SQLAlchemy
+        datos_proveedores = session.query(Proveedor).all()
+        print(datos_proveedores)
+        
+        # Crear el Treeview
+        self.treeview_proveedores = ttk.Treeview(self.frame_Menu_contactos_base, columns=(
+            "ID", "Nombre Contacto", "Nombre Empresa", "Número Proveedor", 
+            "Correo Proveedor", "NIT Empresa", "Página Web", "Dirección Empresa", 
+            "Notas Adicionales"
+        ), show="headings")
+
+        # Configurar los encabezados de las columnas
+        self.treeview_proveedores.heading("ID", text="ID")
+        self.treeview_proveedores.heading("Nombre Contacto", text="Nombre Contacto")
+        self.treeview_proveedores.heading("Nombre Empresa", text="Nombre Empresa")
+        self.treeview_proveedores.heading("Número Proveedor", text="Número Proveedor")
+        self.treeview_proveedores.heading("Correo Proveedor", text="Correo Proveedor")
+        self.treeview_proveedores.heading("NIT Empresa", text="NIT Empresa")
+        self.treeview_proveedores.heading("Página Web", text="Página Web")
+        self.treeview_proveedores.heading("Dirección Empresa", text="Dirección Empresa")
+        self.treeview_proveedores.heading("Notas Adicionales", text="Notas Adicionales")
+
+        # Limpiar cualquier dato previo en el Treeview
+        for fila in self.treeview_proveedores.get_children():
+            self.treeview_proveedores.delete(fila)
+
+        # Llenar el Treeview con los datos de los proveedores
+        for proveedor in datos_proveedores:
+            valores = (
+                proveedor.id,
+                proveedor.nombre_contacto,
+                proveedor.nombre_empresa,
+                proveedor.numero_proveedor,
+                proveedor.correo_proveedor,
+                proveedor.nit_empresa,
+                proveedor.pagina_web,
+                proveedor.direccion_empresa,
+                proveedor.notas_adicionales
+            )
+            self.treeview_proveedores.insert("", "end", values=valores)    
+            
+        # Establecer anchos específicos para cada columna (en píxeles)
+        self.treeview_proveedores.column("ID", width=25,  anchor="center")
+        self.treeview_proveedores.column("Nombre Contacto", width=160, anchor="center")
+        self.treeview_proveedores.column("Nombre Empresa", width=160, anchor="center")
+        self.treeview_proveedores.column("Número Proveedor", width=120, anchor="center")
+        self.treeview_proveedores.column("Correo Proveedor", width=200, anchor="center")
+        self.treeview_proveedores.column("NIT Empresa", width=120, anchor="center")
+        self.treeview_proveedores.column("Página Web", width=150, anchor="center")
+        self.treeview_proveedores.column("Dirección Empresa", width=400, anchor="center")
+        self.treeview_proveedores.column("Notas Adicionales", width=600, anchor="center")
+        
+        # Empacar el Treeview
+        self.treeview_proveedores.pack(fill="both", expand=True)
+
+    
     def create_graphics(self):
         # Gráfica 1: Stock de productos por categoría
         categorias_stock = session.query(Producto.categoria, func.sum(Producto.cantidad_unidades)).group_by(Producto.categoria).all()
