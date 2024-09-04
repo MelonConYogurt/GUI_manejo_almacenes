@@ -100,13 +100,13 @@ class aplicacion(customtkinter.CTk):
         self.title("Inventory")
         
         # Frame arriba menu:
-        self.frame_menu_parte_alta = customtkinter.CTkFrame(master=self, width= 50, height= 50, fg_color="#2b2b2b", corner_radius=0 , )
-        self.frame_menu_parte_alta.grid(row=0, column=0, columnspan=2, padx=2, pady=2, sticky="nsew")
+        self.frame_menu_parte_alta = customtkinter.CTkFrame(master=self, width= 50, height= 50, fg_color="#2b2b2b", corner_radius=0 , border_color="#1e1e1e", border_width=1 )
+        self.frame_menu_parte_alta.grid(row=0, column=0, columnspan=2, sticky="nsew")
         #Configuramos el grid:
     
         # Frames barra de menú:
-        self.frame_menu = customtkinter.CTkFrame(master=self, fg_color="#2b2b2b", corner_radius=0)
-        self.frame_menu.grid(row=1, column=0,  rowspan=2, pady=5, sticky="nsew")
+        self.frame_menu = customtkinter.CTkFrame(master=self, fg_color="#2b2b2b", corner_radius=0, border_color="#1e1e1e", border_width=1)
+        self.frame_menu.grid(row=1, column=0,  rowspan=2,  sticky="nsew")
         #Frame base para todo el inicio
         self.frame_Menu_base= customtkinter.CTkFrame(master=self, fg_color="transparent"  ) 
         self.frame_Menu_base.grid(row=1, column=1, padx=5, rowspan=2, pady=5, sticky="nsew")
@@ -121,6 +121,16 @@ class aplicacion(customtkinter.CTk):
         self.frame_Menu_inventario = customtkinter.CTkFrame(master=self.frame_Menu_base, fg_color="#242424")
         self.frame_Menu_ventas = customtkinter.CTkFrame(master=self.frame_Menu_base, fg_color="#242424")
         self.frame_Menu_vacio_N1 = customtkinter.CTkFrame(master=self.frame_Menu_base, fg_color="#242424")
+        self.frame_Menu_productos_vendidos = customtkinter.CTkFrame(master=self.frame_Menu_base, fg_color="#242424")
+        self.frame_Menu_productos_vendidos.grid(row=2, column=0, padx=5, pady=5, sticky="nsew")
+        self.frame_Menu_productos_vendidos.grid_rowconfigure((0, 1), weight=1, uniform='a')
+        self.frame_Menu_productos_vendidos.grid_columnconfigure(0, weight=1, uniform='a')
+
+        self.frame_Menu_productos_vendidos_N1 = customtkinter.CTkScrollableFrame(master=self.frame_Menu_productos_vendidos, fg_color="#2b2b2b", orientation="horizontal")
+        self.frame_Menu_productos_vendidos_N1.grid(row=0, column=0, padx=5, pady=5, sticky="nsew")
+
+        self.frame_Menu_productos_vendidos_N2 = customtkinter.CTkScrollableFrame(master=self.frame_Menu_productos_vendidos, fg_color="#2b2b2b", orientation="horizontal" )
+        self.frame_Menu_productos_vendidos_N2.grid(row=1, column=0, padx=5, pady=5, sticky="nsew")
         
         #configuramos el grid
         self.frame_Menu_ventas.grid_rowconfigure((0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20), weight=1, uniform='a')  
@@ -969,11 +979,16 @@ class aplicacion(customtkinter.CTk):
                                                    fg_color="transparent", text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"),
                                                    anchor="w", command=self.Menu_vacio_N1_evento)
         self.Menu_vacio_N1_boton.grid(row=7, column=0, padx=5, pady=5, sticky="nsew")
+        #
+        self.Menu_productos_vendidos_boton = customtkinter.CTkButton(self.frame_menu,  height=40, border_spacing=10, text="Ventas",
+                                                   fg_color="transparent", text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"),
+                                                   anchor="w", command=self.Menu_productos_vendidos_boton_evento)
+        self.Menu_productos_vendidos_boton.grid(row=8, column=0, padx=5, pady=5, sticky="nsew")
         
         #Labels menu arriba:
         self.titulo_app = customtkinter.CTkButton(self.frame_menu_parte_alta,  height=40, border_spacing=10, text="Inventory",
                                                    fg_color="transparent", text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"),
-                                                   anchor="w", command=self)
+                                                   anchor="w", command=self.Menu_productos_vendidos_boton_evento)
         self.titulo_app.grid(row=0, column=0, padx=5, pady=5, sticky="nsew")
        
     
@@ -983,6 +998,8 @@ class aplicacion(customtkinter.CTk):
         self.generar_visualizacion_proveedores()
         self.generar_visualizacion_db_selecionados()
         self.generar_visualizacion_db_inventario()
+        self.generar_visualizacion_producto_vendidos()
+        self.generar_visualizacion_ventas()
         self.create_graphics()
     
     def Mostrar_menu_seleccionado(self, name):
@@ -992,6 +1009,7 @@ class aplicacion(customtkinter.CTk):
         self.Menu_inventario_boton.configure(fg_color=("gray75", "gray25") if name == "Menu_inventario" else "transparent")
         self.Menu_ventas_boton.configure(fg_color=("gray75", "gray25") if name == "Menu_ventas" else "transparent")
         self.Menu_vacio_N1_boton.configure(fg_color=("gray75", "gray25") if name == "Menu_vacio_N1" else "transparent")
+        self.Menu_productos_vendidos_boton.configure(fg_color=("gray75", "gray25") if name == "Ventas" else "transparent")
         
         
         # show selected frame
@@ -1014,7 +1032,11 @@ class aplicacion(customtkinter.CTk):
         if name == "Menu_vacio_N1":
             self.frame_Menu_vacio_N1.grid(row=0, column=0, columnspan= 2, rowspan=2,  sticky="nsew")
         else:
-            self.frame_Menu_vacio_N1.grid_forget()    
+            self.frame_Menu_vacio_N1.grid_forget()
+        if name == "Ventas":
+            self.frame_Menu_productos_vendidos.grid(row=0, column=0, columnspan= 2, rowspan=2,  sticky="nsew")
+        else:
+            self.frame_Menu_productos_vendidos.grid_forget()    
                               
     def Menu_inicio_evento(self):
         self.Mostrar_menu_seleccionado("Menu_inicio")
@@ -1039,6 +1061,9 @@ class aplicacion(customtkinter.CTk):
 
     def Menu_vacio_N1_evento(self):
         self.Mostrar_menu_seleccionado("Menu_vacio_N1")
+        
+    def Menu_productos_vendidos_boton_evento(self):
+        self.Mostrar_menu_seleccionado("Ventas")
 
     def obtener_datos_producto_nuevo(self):
         # Obtener datos de la GUI
@@ -1217,69 +1242,121 @@ class aplicacion(customtkinter.CTk):
 
     def generar_visualizacion_producto_vendidos(self):
         # Configuración de colores y estilos para el Treeview
-        bg_color = self.frame_Menu_contactos_base._apply_appearance_mode(customtkinter.ThemeManager.theme["CTkFrame"]["fg_color"])
-        text_color = self.frame_Menu_contactos_base._apply_appearance_mode(customtkinter.ThemeManager.theme["CTkLabel"]["text_color"])
-        selected_color = self.frame_Menu_contactos_base._apply_appearance_mode(customtkinter.ThemeManager.theme["CTkButton"]["fg_color"])
+        bg_color = self.frame_Menu_productos_vendidos_N1._apply_appearance_mode(customtkinter.ThemeManager.theme["CTkFrame"]["fg_color"])
+        text_color = self.frame_Menu_productos_vendidos_N1._apply_appearance_mode(customtkinter.ThemeManager.theme["CTkLabel"]["text_color"])
+        selected_color = self.frame_Menu_productos_vendidos_N1._apply_appearance_mode(customtkinter.ThemeManager.theme["CTkButton"]["fg_color"])
         
         treestyle = ttk.Style()
         treestyle.theme_use('default')
         treestyle.configure("Treeview", background=bg_color, foreground=text_color, fieldbackground=bg_color, borderwidth=0 , rowheight=40)
         treestyle.map('Treeview', background=[('selected', bg_color)], foreground=[('selected', selected_color)])
         
-        # Extraemos la data de la tabla de proveedores usando SQLAlchemy
-        datos_proveedores = session.query(Proveedor).all()
-        print(datos_proveedores)
+        # Extraemos la data de la tabla de productos vendidos usando SQLAlchemy
+        datos_productos_vendidos = session.query(ProductoVendido).all()
+        print(datos_productos_vendidos)
         
         # Crear el Treeview
-        self.treeview_proveedores = ttk.Treeview(self.frame_Menu_contactos_base, columns=(
-            "ID", "Nombre Contacto", "Nombre Empresa", "Número Proveedor", 
-            "Correo Proveedor", "NIT Empresa", "Página Web", "Dirección Empresa", 
-            "Notas Adicionales"
+        self.treeview_productos_vendidos = ttk.Treeview(self.frame_Menu_productos_vendidos_N1, columns=(
+            "ID", "Nombre Producto", "Cantidad Vendida", "Precio Venta Unitario"
         ), show="headings")
 
         # Configurar los encabezados de las columnas
-        self.treeview_proveedores.heading("ID", text="ID")
-        self.treeview_proveedores.heading("Nombre Contacto", text="Nombre Contacto")
-        self.treeview_proveedores.heading("Nombre Empresa", text="Nombre Empresa")
-        self.treeview_proveedores.heading("Número Proveedor", text="Número Proveedor")
-        self.treeview_proveedores.heading("Correo Proveedor", text="Correo Proveedor")
-        self.treeview_proveedores.heading("NIT Empresa", text="NIT Empresa")
-        self.treeview_proveedores.heading("Página Web", text="Página Web")
-        self.treeview_proveedores.heading("Dirección Empresa", text="Dirección Empresa")
-        self.treeview_proveedores.heading("Notas Adicionales", text="Notas Adicionales")
+        self.treeview_productos_vendidos.heading("ID", text="ID")
+        self.treeview_productos_vendidos.heading("Nombre Producto", text="Nombre Producto")
+        self.treeview_productos_vendidos.heading("Cantidad Vendida", text="Cantidad Vendida")
+        self.treeview_productos_vendidos.heading("Precio Venta Unitario", text="Precio Venta Unitario")
 
         # Limpiar cualquier dato previo en el Treeview
-        for fila in self.treeview_proveedores.get_children():
-            self.treeview_proveedores.delete(fila)
+        for fila in self.treeview_productos_vendidos.get_children():
+            self.treeview_productos_vendidos.delete(fila)
 
-        # Llenar el Treeview con los datos de los proveedores
-        for proveedor in datos_proveedores:
+        # Llenar el Treeview con los datos de los productos vendidos
+        for producto_vendido in datos_productos_vendidos:
             valores = (
-                proveedor.id,
-                proveedor.nombre_contacto,
-                proveedor.nombre_empresa,
-                proveedor.numero_proveedor,
-                proveedor.correo_proveedor,
-                proveedor.nit_empresa,
-                proveedor.pagina_web,
-                proveedor.direccion_empresa,
-                proveedor.notas_adicionales
+                producto_vendido.id,
+                producto_vendido.producto_id,
+                producto_vendido.cantidad,
+                producto_vendido.precio_venta_unitario,
             )
-            self.treeview_proveedores.insert("", "end", values=valores)    
+            self.treeview_productos_vendidos.insert("", "end", values=valores)    
             
         # Establecer anchos específicos para cada columna (en píxeles)
-        self.treeview_proveedores.column("ID", width=25,  anchor="center")
-        self.treeview_proveedores.column("Nombre Contacto", width=160, anchor="center")
-        self.treeview_proveedores.column("Nombre Empresa", width=160, anchor="center")
-        self.treeview_proveedores.column("Número Proveedor", width=120, anchor="center")
-        self.treeview_proveedores.column("Correo Proveedor", width=200, anchor="center")
-        self.treeview_proveedores.column("NIT Empresa", width=120, anchor="center")
-        self.treeview_proveedores.column("Página Web", width=150, anchor="center")
-        self.treeview_proveedores.column("Dirección Empresa", width=400, anchor="center")
-        self.treeview_proveedores.column("Notas Adicionales", width=600, anchor="center")
+        self.treeview_productos_vendidos.column("ID", width=25,  anchor="center")
+        self.treeview_productos_vendidos.column("Nombre Producto", width=200, anchor="center")
+        self.treeview_productos_vendidos.column("Cantidad Vendida", width=200, anchor="center")
+        self.treeview_productos_vendidos.column("Precio Venta Unitario", width=200, anchor="center")
         
         # Empacar el Treeview
-        self.treeview_proveedores.pack(fill="both", expand=True)
+        self.treeview_productos_vendidos.pack(fill="both", expand=True)
+        
+    def generar_visualizacion_ventas(self):
+        # Configuración de colores y estilos para el Treeview
+        bg_color = self.frame_Menu_productos_vendidos_N2._apply_appearance_mode(customtkinter.ThemeManager.theme["CTkFrame"]["fg_color"])
+        text_color = self.frame_Menu_productos_vendidos_N2._apply_appearance_mode(customtkinter.ThemeManager.theme["CTkLabel"]["text_color"])
+        selected_color = self.frame_Menu_productos_vendidos_N2._apply_appearance_mode(customtkinter.ThemeManager.theme["CTkButton"]["fg_color"])
+        
+        treestyle = ttk.Style()
+        treestyle.theme_use('default')
+        treestyle.configure("Treeview", background=bg_color, foreground=text_color, fieldbackground=bg_color, borderwidth=0 , rowheight=40)
+        treestyle.map('Treeview', background=[('selected', bg_color)], foreground=[('selected', selected_color)])
+        
+        # Extraemos la data de la tabla de ventas usando SQLAlchemy
+        datos_ventas = session.query(Venta).all()
+        print(datos_ventas)
+        
+        # Crear el Treeview
+        self.treeview_ventas = ttk.Treeview(self.frame_Menu_productos_vendidos_N2, columns=(
+            "ID", "Fecha Venta", "Realizada Por", "Cliente ID", 
+            "Porcentaje IVA", "Método Pago", "Método Envío", "Total Venta", 
+            "Total Productos", "Productos"
+        ), show="headings")
+
+        # Configurar los encabezados de las columnas
+        self.treeview_ventas.heading("ID", text="ID")
+        self.treeview_ventas.heading("Fecha Venta", text="Fecha Venta")
+        self.treeview_ventas.heading("Realizada Por", text="Realizada Por")
+        self.treeview_ventas.heading("Cliente ID", text="Cliente ID")
+        self.treeview_ventas.heading("Porcentaje IVA", text="Porcentaje IVA")
+        self.treeview_ventas.heading("Método Pago", text="Método Pago")
+        self.treeview_ventas.heading("Método Envío", text="Método Envío")
+        self.treeview_ventas.heading("Total Venta", text="Total Venta")
+        self.treeview_ventas.heading("Total Productos", text="Total Productos")
+        self.treeview_ventas.heading("Productos", text="Productos")
+
+        # Limpiar cualquier dato previo en el Treeview
+        for fila in self.treeview_ventas.get_children():
+            self.treeview_ventas.delete(fila)
+
+        # Llenar el Treeview con los datos de las ventas
+        for venta in datos_ventas:
+            valores = (
+                venta.id,
+                venta.fecha_venta,
+                venta.realizada_por,
+                venta.cliente_id,
+                venta.porcentaje_iva,
+                venta.metodo_pago,
+                venta.metodo_envio,
+                venta.total_venta,
+                venta.total_productos,
+                venta.productos
+            )
+            self.treeview_ventas.insert("", "end", values=valores)    
+            
+        # Establecer anchos específicos para cada columna (en píxeles)
+        self.treeview_ventas.column("ID", width=25,  anchor="center")
+        self.treeview_ventas.column("Fecha Venta", width=160, anchor="center")
+        self.treeview_ventas.column("Realizada Por", width=120, anchor="center")
+        self.treeview_ventas.column("Cliente ID", width=200, anchor="center")
+        self.treeview_ventas.column("Porcentaje IVA", width=120, anchor="center")
+        self.treeview_ventas.column("Método Pago", width=120, anchor="center")
+        self.treeview_ventas.column("Método Envío", width=150, anchor="center")
+        self.treeview_ventas.column("Total Venta", width=200, anchor="center")
+        self.treeview_ventas.column("Total Productos", width=200, anchor="center")
+        self.treeview_ventas.column("Productos", width=600, anchor="center")
+        
+        # Empacar el Treeview
+        self.treeview_ventas.pack(fill="both", expand=True)
 
     
     def create_graphics(self):
@@ -1828,8 +1905,6 @@ class aplicacion(customtkinter.CTk):
         try:            
             seleccion = self.treeview_seleccionados.get_children()
             if seleccion:
-                for fila in self.treeview_seleccionados.get_children():
-                    self.treeview_seleccionados.delete(fila)
                 for fila_seleccionada in seleccion:
                     valores = self.treeview_seleccionados.item(fila_seleccionada, "values")
 
@@ -1976,9 +2051,13 @@ class aplicacion(customtkinter.CTk):
             TituloFactura = f"Main\Facturas\Factura_{nombre_del_cliente}.pdf"
             factura.download(TituloFactura)
             self.VerFactura(TituloFactura)
-
+            for fila in self.treeview_seleccionados.get_children():
+                self.treeview_seleccionados.delete(fila)
+            session.query(ProductoSelecionado).delete()
+            session.commit()
+         
         except Exception as e:
-                print(e)
+            print(e)
                          
     def VerFactura(self, ruta_pdf):
         try:
