@@ -100,16 +100,15 @@ class aplicacion(customtkinter.CTk):
         self.title("Inventory")
         
         # Frame arriba menu:
-        self.frame_menu_parte_alta = customtkinter.CTkFrame(master=self, width= 50, height= 50, fg_color="#2b2b2b")
-        self.frame_menu_parte_alta.grid(row=0, column=0, columnspan=2, padx=5, pady=5, sticky="nsew")
+        self.frame_menu_parte_alta = customtkinter.CTkFrame(master=self, width= 50, height= 50, fg_color="#2b2b2b", corner_radius=0 , )
+        self.frame_menu_parte_alta.grid(row=0, column=0, columnspan=2, padx=2, pady=2, sticky="nsew")
         #Configuramos el grid:
-        self.frame_menu_parte_alta.grid_columnconfigure((0,1,2,3,4,5), weight=1, uniform='a')
     
         # Frames barra de menú:
-        self.frame_menu = customtkinter.CTkFrame(master=self, fg_color="#2b2b2b")
-        self.frame_menu.grid(row=1, column=0, padx=5, rowspan=2, pady=5, sticky="nsew")
+        self.frame_menu = customtkinter.CTkFrame(master=self, fg_color="#2b2b2b", corner_radius=0)
+        self.frame_menu.grid(row=1, column=0,  rowspan=2, pady=5, sticky="nsew")
         #Frame base para todo el inicio
-        self.frame_Menu_base= customtkinter.CTkFrame(master=self, fg_color="transparent") 
+        self.frame_Menu_base= customtkinter.CTkFrame(master=self, fg_color="transparent"  ) 
         self.frame_Menu_base.grid(row=1, column=1, padx=5, rowspan=2, pady=5, sticky="nsew")
         #Configuramos el grid:3
         self.frame_Menu_base.grid_columnconfigure((0,1), weight=1, uniform='a')
@@ -120,8 +119,6 @@ class aplicacion(customtkinter.CTk):
         self.frame_Menu_analitica = customtkinter.CTkScrollableFrame(master=self.frame_Menu_base, fg_color="#242424", orientation="vertical")
         self.frame_Menu_contactos = customtkinter.CTkFrame(master=self.frame_Menu_base, fg_color="#242424")
         self.frame_Menu_inventario = customtkinter.CTkFrame(master=self.frame_Menu_base, fg_color="#242424")
-        self.frame_Menu_catalogo = customtkinter.CTkFrame(master=self.frame_Menu_base, fg_color="#242424")
-        self.frame_Menu_tiendas = customtkinter.CTkFrame(master=self.frame_Menu_base, fg_color="#242424")
         self.frame_Menu_ventas = customtkinter.CTkFrame(master=self.frame_Menu_base, fg_color="#242424")
         self.frame_Menu_vacio_N1 = customtkinter.CTkFrame(master=self.frame_Menu_base, fg_color="#242424")
         
@@ -198,33 +195,6 @@ class aplicacion(customtkinter.CTk):
         self.frame_Menu_inventario_N1 =  customtkinter.CTkScrollableFrame(master=self.frame_Menu_inventario, fg_color="#2b2b2b", orientation="horizontal")
         self.frame_Menu_inventario_N1.grid(row=0, column=0, padx=5,  pady=5, sticky="nsew")
        
-        
-        #Frames para el menu de catalogo:
-        self.frame_Menu_catalogo.grid_rowconfigure((0,1), weight=1, uniform='a')  
-        self.frame_Menu_catalogo.grid_columnconfigure((0,1), weight=1, uniform='a')
-        #
-        self.frame_Menu_catalogo_N1 = customtkinter.CTkFrame(master=self.frame_Menu_catalogo, fg_color="#2b2b2b")
-        self.frame_Menu_catalogo_N1.grid(row=0, column=0, padx=5,  pady=5, sticky="nsew")
-        self.frame_Menu_catalogo_N2 = customtkinter.CTkFrame(master=self.frame_Menu_catalogo, fg_color="#2b2b2b")
-        self.frame_Menu_catalogo_N2.grid(row=1, column=0, padx=5,  pady=5, sticky="nsew")
-        self.frame_Menu_catalogo_N3 = customtkinter.CTkFrame(master=self.frame_Menu_catalogo, fg_color="#2b2b2b")
-        self.frame_Menu_catalogo_N3.grid(row=0, column=1, padx=5,  pady=5, sticky="nsew")
-        self.frame_Menu_catalogo_N4 = customtkinter.CTkFrame(master=self.frame_Menu_catalogo, fg_color="#2b2b2b")
-        self.frame_Menu_catalogo_N4.grid(row=1, column=1, padx=5,  pady=5, sticky="nsew")
-       
-        #Frames para el menu de tiendas:
-        self.frame_Menu_tiendas.grid_rowconfigure((0,1), weight=1, uniform='a')  
-        self.frame_Menu_tiendas.grid_columnconfigure((0,1), weight=1, uniform='a')
-        #
-        self.frame_Menu_tiendas_N1 = customtkinter.CTkFrame(master=self.frame_Menu_tiendas, fg_color="#2b2b2b")
-        self.frame_Menu_tiendas_N1.grid(row=0, column=0, padx=5,  pady=5, sticky="nsew")
-        self.frame_Menu_tiendas_N2 = customtkinter.CTkFrame(master=self.frame_Menu_tiendas, fg_color="#2b2b2b")
-        self.frame_Menu_tiendas_N2.grid(row=1, column=0, padx=5,  pady=5, sticky="nsew")
-        self.frame_Menu_tiendas_N3 = customtkinter.CTkFrame(master=self.frame_Menu_tiendas, fg_color="#2b2b2b")
-        self.frame_Menu_tiendas_N3.grid(row=0, column=1, padx=5,  pady=5, sticky="nsew")
-        self.frame_Menu_tiendas_N4 = customtkinter.CTkFrame(master=self.frame_Menu_tiendas, fg_color="#2b2b2b")
-        self.frame_Menu_tiendas_N4.grid(row=1, column=1, padx=5,  pady=5, sticky="nsew")
-       
         #Frames para el menu de ventas:
         self.frame_Menu_ventas_N1 = customtkinter.CTkFrame(master=self.frame_Menu_ventas, fg_color="#2b2b2b", )#width=1745, height=48
         self.frame_Menu_ventas_N1.grid(row=0, column=0, rowspan=1 ,columnspan=2, padx=5, pady=5, sticky="nsew")
@@ -232,13 +202,13 @@ class aplicacion(customtkinter.CTk):
         self.frame_Menu_ventas_N1.grid_rowconfigure((0), weight=1, uniform='a')
         self.frame_Menu_ventas_N1.grid_columnconfigure((0), weight=1, uniform='a')
         #
-        self.frame_Menu_ventas_N2 = customtkinter.CTkFrame(master=self.frame_Menu_ventas, fg_color="#212121", )#width=1745, height=410 3c3c3c
+        self.frame_Menu_ventas_N2 = customtkinter.CTkFrame(master=self.frame_Menu_ventas, fg_color="#2b2b2b", )#width=1745, height=410 3c3c3c
         self.frame_Menu_ventas_N2.grid(row=1, column=0,  rowspan=11, columnspan=2, padx=5, pady=5, sticky="nsew")
         #Configuramos el grid:
         self.frame_Menu_ventas_N2.grid_rowconfigure((0,1,2,3,4,5,6,7,8,9,10), weight=1, uniform='a')  
         self.frame_Menu_ventas_N2.grid_columnconfigure((0,1,2,3), weight=1, uniform='a')
         #        
-        self.frame_Menu_ventas_N3 = customtkinter.CTkFrame(master=self.frame_Menu_ventas, fg_color="#212121", )#width=1745, height=50 3c3c3c
+        self.frame_Menu_ventas_N3 = customtkinter.CTkFrame(master=self.frame_Menu_ventas, fg_color="#2b2b2b", )#width=1745, height=50 3c3c3c
         self.frame_Menu_ventas_N3.grid(row=12, column=0,  rowspan=9, columnspan=2, padx=5,  pady=5, sticky="nsew")
         #Configuramos el grid:
         self.frame_Menu_ventas_N3.grid_rowconfigure((0,1,2,3,4,5,6), weight=1, uniform='a')  
@@ -275,10 +245,10 @@ class aplicacion(customtkinter.CTk):
         self.frame_10 = customtkinter.CTkFrame(master=self.frame_Menu_ventas_N3, fg_color="#2b2b2b", )
         self.frame_10.grid(row=3, column=2, padx=5,  pady=5, sticky="nsew")
         #
-        self.frame_12 = customtkinter.CTkFrame(master=self.frame_Menu_ventas_N3, fg_color="#212121", )
+        self.frame_12 = customtkinter.CTkFrame(master=self.frame_Menu_ventas_N3, fg_color="#2b2b2b", )
         self.frame_12.grid(row=4, rowspan= 4, column= 1, columnspan= 2 ,padx=5,  pady=5, sticky="nsew")
         #
-        self.frame_factura = customtkinter.CTkFrame(master=self.frame_Menu_ventas_N3, fg_color="#212121", ) #1e1e1e
+        self.frame_factura = customtkinter.CTkFrame(master=self.frame_Menu_ventas_N3, fg_color="#2b2b2b", ) #1e1e1e
         self.frame_factura.grid(row=0, rowspan=7, column=3,  padx=5,  pady=5, sticky="nsew")
         #
         self.frame_factura.grid_rowconfigure((0,1,2,3,4,5), weight=1, uniform='a') 
@@ -547,19 +517,19 @@ class aplicacion(customtkinter.CTk):
         self.porcentaje_de_iva_entrada = frame_seleccion_nuemeros(self.frame_factura_10, width=180, step_size=1 )
         self.porcentaje_de_iva_entrada.pack(padx=5, pady=(10,10))
         #Frames para el menu de incio:
-        self.frame_Menu_vacio_N1_N1 = customtkinter.CTkFrame(master=self.frame_Menu_vacio_N1, fg_color="#212121", )
+        self.frame_Menu_vacio_N1_N1 = customtkinter.CTkFrame(master=self.frame_Menu_vacio_N1, fg_color="#2b2b2b", )
         self.frame_Menu_vacio_N1_N1.grid(row=0, column=0, columnspan=2, padx=5,  pady=5, sticky="nsew")
         #
         self.frame_Menu_vacio_N1_N1.grid_rowconfigure((0,1,2,3,4), weight=1, uniform='a')  
         self.frame_Menu_vacio_N1_N1.grid_columnconfigure((0,1,2,3), weight=1, uniform='a')
         #
-        self.frame_Menu_vacio_N1_N2 = customtkinter.CTkFrame(master=self.frame_Menu_vacio_N1, fg_color="#212121", )
+        self.frame_Menu_vacio_N1_N2 = customtkinter.CTkFrame(master=self.frame_Menu_vacio_N1, fg_color="#2b2b2b", )
         self.frame_Menu_vacio_N1_N2.grid(row=1, column=0, columnspan=2, padx=5,  pady=5, sticky="nsew")
         #
         self.frame_Menu_vacio_N1_N2.grid_rowconfigure((0,1,2,3,4), weight=1, uniform='a')  
         self.frame_Menu_vacio_N1_N2.grid_columnconfigure((0,1,2,3), weight=1, uniform='a')
         #
-        self.frame_Menu_vacio_N1_N3 = customtkinter.CTkFrame(master=self.frame_Menu_vacio_N1, fg_color="#212121", )
+        self.frame_Menu_vacio_N1_N3 = customtkinter.CTkFrame(master=self.frame_Menu_vacio_N1, fg_color="#2b2b2b", )
         self.frame_Menu_vacio_N1_N3.grid(row=2, column=0, columnspan=2, padx=5,  pady=5, sticky="nsew")
         #
         self.frame_Menu_vacio_N1_N3.grid_rowconfigure((0,1,2,3,4), weight=1, uniform='a') 
@@ -1001,7 +971,7 @@ class aplicacion(customtkinter.CTk):
         self.Menu_vacio_N1_boton.grid(row=7, column=0, padx=5, pady=5, sticky="nsew")
         
         #Labels menu arriba:
-        self.titulo_app = customtkinter.CTkButton(self.frame_menu_parte_alta,  height=40, border_spacing=10, text="Titulo aplicacion",
+        self.titulo_app = customtkinter.CTkButton(self.frame_menu_parte_alta,  height=40, border_spacing=10, text="Inventory",
                                                    fg_color="transparent", text_color=("gray10", "gray90"), hover_color=("gray70", "gray30"),
                                                    anchor="w", command=self)
         self.titulo_app.grid(row=0, column=0, padx=5, pady=5, sticky="nsew")
