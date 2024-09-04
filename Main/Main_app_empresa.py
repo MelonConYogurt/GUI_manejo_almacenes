@@ -18,6 +18,8 @@ from CTkScrollableDropdown import *
 from CTkPopupKeyboard import PopupNumpad
 from Crud_Base_Datos import * 
 from BaseDeDatosInventario import Producto, Proveedor, session
+from sqlalchemy import func
+
 
 class frame_seleccion_nuemeros(customtkinter.CTkFrame):
     def __init__(self, *args,
@@ -182,16 +184,19 @@ class aplicacion(customtkinter.CTk):
         
         #Frames para el menu de analitica:
         self.frame_Menu_analitica.grid_rowconfigure((0,1), weight=1, uniform='a')  
-        self.frame_Menu_analitica.grid_columnconfigure((0,1), weight=1, uniform='a')
+        self.frame_Menu_analitica.grid_columnconfigure((0), weight=1, uniform='a')
         #
-        self.frame_Menu_analitica_N1 = customtkinter.CTkFrame(master=self.frame_Menu_analitica, fg_color="#2b2b2b")
+        self.frame_Menu_analitica_N1 = customtkinter.CTkScrollableFrame(master=self.frame_Menu_analitica, fg_color="#2b2b2b", orientation="horizontal")
         self.frame_Menu_analitica_N1.grid(row=0, column=0, padx=5,  pady=5, sticky="nsew")
-        self.frame_Menu_analitica_N2 = customtkinter.CTkFrame(master=self.frame_Menu_analitica, fg_color="#2b2b2b")
+        
+        self.frame_Menu_analitica_N2 = customtkinter.CTkScrollableFrame(master=self.frame_Menu_analitica, fg_color="#2b2b2b", orientation="horizontal")
         self.frame_Menu_analitica_N2.grid(row=1, column=0, padx=5,  pady=5, sticky="nsew")
-        self.frame_Menu_analitica_N3 = customtkinter.CTkFrame(master=self.frame_Menu_analitica, fg_color="#2b2b2b")
-        self.frame_Menu_analitica_N3.grid(row=0, column=1, padx=5,  pady=5, sticky="nsew")
-        self.frame_Menu_analitica_N4 = customtkinter.CTkFrame(master=self.frame_Menu_analitica, fg_color="#2b2b2b")
-        self.frame_Menu_analitica_N4.grid(row=1, column=1, padx=5,  pady=5, sticky="nsew")
+        
+        self.frame_Menu_analitica_N3 = customtkinter.CTkScrollableFrame(master=self.frame_Menu_analitica, fg_color="#2b2b2b", orientation="horizontal")
+        self.frame_Menu_analitica_N3.grid(row=2, column=0, padx=5,  pady=5, sticky="nsew")
+        
+        self.frame_Menu_analitica_N4 = customtkinter.CTkScrollableFrame(master=self.frame_Menu_analitica, fg_color="#2b2b2b", orientation="horizontal")
+        self.frame_Menu_analitica_N4.grid(row=3, column=0, padx=5,  pady=5, sticky="nsew")
         
         #Frames para el menu de contactanos:
         self.frame_Menu_contactos.grid_rowconfigure((0), weight=1, uniform='a')  
@@ -387,11 +392,7 @@ class aplicacion(customtkinter.CTk):
         self.frame_database_elemento_descuento.pack_propagate(0)
         self.frame_database_boton_anadir.pack_propagate(0)
 
-        #labels y widgets del area de ventas
-        self.titulo_busqueda_data_base = customtkinter.CTkLabel(self.busqueda_frame_1,
-                                                        text="Puedes realizar la busqueda de productos por su nombre o por respectivo codigo")
-        self.titulo_busqueda_data_base.pack(side="left", padx=5, pady=5)
-        #
+        
         self.titulo_busqueda_data_base_nombre = customtkinter.CTkLabel(self.busqueda_frame_1,
                                                         text="Busqueda por nombre del producto:")
         self.titulo_busqueda_data_base_nombre.pack(side="left", padx=5, pady=5)
@@ -537,7 +538,7 @@ class aplicacion(customtkinter.CTk):
         self.label_porcentaje_iva = customtkinter.CTkLabel(self.frame_factura_5, text="Ingresar porcentaje de IVA:")
         self.label_porcentaje_iva.pack(side="left", padx=(5,20), pady=5)
         #
-        self.el_total_compra = customtkinter.CTkButton(self.frame_factura_6, text="Ver previsulizacion de la factura", command= lambda: self.crear_factura())
+        self.el_total_compra = customtkinter.CTkButton(self.frame_factura_6, text="Completar la compra", command= lambda: self.crear_factura() , height=35)
         self.el_total_compra.pack(pady=15)
         #
         self.valores_empleados =["Empleado 1","Empleado 2","Empleado 3","Empleado 4","Empleado 5","Empleado 6"]
@@ -1387,47 +1388,65 @@ class aplicacion(customtkinter.CTk):
         self.treeview_proveedores.pack(fill="both", expand=True)
 
     def create_graphics(self):
-        # Gráfica 1: Total de ventas por día
-        ventas_por_dia = session.query(Venta.fecha_venta, Venta.total_venta).all()
-        fechas, totales = zip(*ventas_por_dia)
-        fig1, ax1 = plt.subplots()
-        ax1.plot(fechas, totales, label='Total Ventas')
-        ax1.set_title('Total de Ventas por Día')
-        ax1.set_xlabel('Fecha')
-        ax1.set_ylabel('Total Ventas')
-        ax1.grid(True)
-        self.display_graph(fig1, self.frame_Menu_analitica_N1)
+        # Gráfica 1: Stock de productos por categoría
+        categorias_stock = session.query(Producto.categoria, func.sum(Producto.cantidad_unidades)).group_by(Producto.categoria).all()
+        if categorias_stock:
+            categorias, stock_por_categoria = zip(*categorias_stock)
+            fig1, ax1 = plt.subplots()
+            ax1.bar(categorias, stock_por_categoria, color='skyblue')
+            ax1.set_title('Stock de Productos por Categoría')
+            ax1.set_xlabel('Categoría')
+            ax1.set_ylabel('Cantidad en Stock')
+            ax1.grid(True)
+            self.display_graph(fig1, self.frame_Menu_analitica_N1)
+        else:
+            print("No hay datos para la gráfica de stock por categoría")
 
-        # Gráfica 2: Productos más vendidos
-        productos_vendidos = session.query(ProductoVendido.producto_id, ProductoVendido.cantidad).all()
-        productos, cantidades = zip(*productos_vendidos)
-        fig2, ax2 = plt.subplots()
-        ax2.bar(productos, cantidades, label='Cantidad Vendida')
-        ax2.set_title('Productos Más Vendidos')
-        ax2.set_xlabel('ID Producto')
-        ax2.set_ylabel('Cantidad Vendida')
-        ax2.grid(True)
-        self.display_graph(fig2, self.frame_Menu_analitica_N2)
+        # Gráfica 2: Precios de productos por tipo
+        tipos_precios = session.query(Producto.tipo_producto, func.avg(Producto.precio_venta)).group_by(Producto.tipo_producto).all()
+        if tipos_precios:
+            tipos, precios_promedio = zip(*tipos_precios)
+            fig2, ax2 = plt.subplots()
+            ax2.bar(tipos, precios_promedio, color='lightcoral')
+            ax2.set_title('Precios Promedio de Productos por Tipo')
+            ax2.set_xlabel('Tipo de Producto')
+            ax2.set_ylabel('Precio Promedio')
+            ax2.grid(True)
+            self.display_graph(fig2, self.frame_Menu_analitica_N2)
+        else:
+            print("No hay datos para la gráfica de precios por tipo")
 
-        # Gráfica 3: Ventas por método de pago
-        ventas_metodo_pago = session.query(Venta.metodo_pago, Venta.total_venta).all()
-        metodos, totales_por_metodo = zip(*ventas_metodo_pago)
-        fig3, ax3 = plt.subplots()
-        ax3.pie(totales_por_metodo, labels=metodos, autopct='%1.1f%%', startangle=90)
-        ax3.set_title('Distribución de Ventas por Método de Pago')
-        ax3.axis('equal')
-        self.display_graph(fig3, self.frame_Menu_analitica_N3)
+        # Gráfica 3: Ventas totales por producto
+        productos_ventas = session.query(Producto.id, func.sum(ProductoVendido.cantidad * ProductoVendido.precio_venta_unitario)).join(ProductoVendido, Producto.id == ProductoVendido.producto_id).group_by(Producto.id).all()
+        if productos_ventas:
+            ids_productos, ventas_totales = zip(*productos_ventas)
+            fig3, ax3 = plt.subplots()
+            ax3.bar(ids_productos, ventas_totales, color='seagreen')
+            ax3.set_title('Ventas Totales por Producto')
+            ax3.set_xlabel('ID Producto')
+            ax3.set_ylabel('Ventas Totales')
+            ax3.grid(True)
+            self.display_graph(fig3, self.frame_Menu_analitica_N3)
+        else:
+            print("No hay datos para la gráfica de ventas totales por producto")
 
-        # Gráfica 4: Stock de productos por categoría
-        stock_por_categoria = session.query(Producto.categoria, Producto.cantidad_unidades).all()
-        categorias, stock = zip(*stock_por_categoria)
-        fig4, ax4 = plt.subplots()
-        ax4.barh(categorias, stock, label='Stock')
-        ax4.set_title('Stock de Productos por Categoría')
-        ax4.set_xlabel('Cantidad en Stock')
-        ax4.set_ylabel('Categoría')
-        ax4.grid(True)
-        self.display_graph(fig4, self.frame_Menu_analitica_N4)
+        # Gráfica 4: Precio de compra vs. precio de venta por producto
+        productos_precios = session.query(Producto.nombre, Producto.precio_compra, Producto.precio_venta).all()
+        if productos_precios:
+            nombres, precios_compra, precios_venta = zip(*productos_precios)
+            fig4, ax4 = plt.subplots()
+            ax4.plot(nombres, precios_compra, 'o-', label='Precio de Compra', color='orange')
+            ax4.plot(nombres, precios_venta, 's-', label='Precio de Venta', color='purple')
+            ax4.set_title('Precio de Compra vs. Precio de Venta por Producto')
+            ax4.set_xlabel('Nombre del Producto')
+            ax4.set_ylabel('Precio')
+            ax4.legend()
+            ax4.grid(True)
+            ax4.tick_params(axis='x', rotation=90)
+            self.display_graph(fig4, self.frame_Menu_analitica_N4)
+        else:
+            print("No hay datos para la gráfica de precios de compra vs. precios de venta")
+
 
     def display_graph(self, fig, frame):
         canvas = FigureCanvasTkAgg(fig, master=frame)
@@ -1545,7 +1564,7 @@ class aplicacion(customtkinter.CTk):
         datos = session.query(Producto).all()
         
         # Crear el Treeview
-        self.treeview = ttk.Treeview(self.frame_Menu_inventario_N1, columns=(
+        self.treeview_inventario = ttk.Treeview(self.frame_Menu_inventario_N1, columns=(
             "ID", "Nombre", "Código", "Descripción", "Categoría",
             "Marca", "Precio Compra", "Precio Venta", "Precio Mayorista",
             "Cantidad Unidades", "Temporada Producto", "Fecha Adquisición",
@@ -1554,27 +1573,27 @@ class aplicacion(customtkinter.CTk):
         ), show="headings")
 
         # Configurar los encabezados de las columnas
-        self.treeview.heading("ID", text="ID")
-        self.treeview.heading("Nombre", text="Nombre")
-        self.treeview.heading("Código", text="Código")
-        self.treeview.heading("Descripción", text="Descripción")
-        self.treeview.heading("Categoría", text="Categoría")
-        self.treeview.heading("Marca", text="Marca")
-        self.treeview.heading("Precio Compra", text="Precio Compra")
-        self.treeview.heading("Precio Venta", text="Precio Venta")
-        self.treeview.heading("Precio Mayorista", text="Precio Mayorista")
-        self.treeview.heading("Cantidad Unidades", text="Cantidad Unidades")
-        self.treeview.heading("Temporada Producto", text="Temporada Producto")
-        self.treeview.heading("Fecha Adquisición", text="Fecha Adquisición")
-        self.treeview.heading("Fecha Vencimiento", text="Fecha Vencimiento")
-        self.treeview.heading("Fragilidad", text="Fragilidad")
-        self.treeview.heading("Tipo Producto", text="Tipo Producto")
-        self.treeview.heading("Proveedor ID", text="Proveedor ID")
-        self.treeview.heading("Estado", text="Estado")
+        self.treeview_inventario.heading("ID", text="ID")
+        self.treeview_inventario.heading("Nombre", text="Nombre")
+        self.treeview_inventario.heading("Código", text="Código")
+        self.treeview_inventario.heading("Descripción", text="Descripción")
+        self.treeview_inventario.heading("Categoría", text="Categoría")
+        self.treeview_inventario.heading("Marca", text="Marca")
+        self.treeview_inventario.heading("Precio Compra", text="Precio Compra")
+        self.treeview_inventario.heading("Precio Venta", text="Precio Venta")
+        self.treeview_inventario.heading("Precio Mayorista", text="Precio Mayorista")
+        self.treeview_inventario.heading("Cantidad Unidades", text="Cantidad Unidades")
+        self.treeview_inventario.heading("Temporada Producto", text="Temporada Producto")
+        self.treeview_inventario.heading("Fecha Adquisición", text="Fecha Adquisición")
+        self.treeview_inventario.heading("Fecha Vencimiento", text="Fecha Vencimiento")
+        self.treeview_inventario.heading("Fragilidad", text="Fragilidad")
+        self.treeview_inventario.heading("Tipo Producto", text="Tipo Producto")
+        self.treeview_inventario.heading("Proveedor ID", text="Proveedor ID")
+        self.treeview_inventario.heading("Estado", text="Estado")
 
         # Limpiar cualquier dato previo en el Treeview
-        for fila in self.treeview.get_children():
-            self.treeview.delete(fila)
+        for fila in self.treeview_inventario.get_children():
+            self.treeview_inventario.delete(fila)
 
         # Llenar el Treeview con los datos
         for dato in datos:
@@ -1598,29 +1617,29 @@ class aplicacion(customtkinter.CTk):
                 dato.proveedor_id,
                 dato.estado
             )
-            self.treeview.insert("", "end", values=valores)    
+            self.treeview_inventario.insert("", "end", values=valores)    
         
         # Establecer anchos específicos para cada columna (en píxeles)
-        self.treeview.column("ID", width=25, anchor="center")
-        self.treeview.column("Nombre", width=160, anchor="center")
-        self.treeview.column("Código", width=90, anchor="center")
-        self.treeview.column("Descripción", width=200, anchor="center")
-        self.treeview.column("Categoría", width=90, anchor="center")
-        self.treeview.column("Marca", width=90, anchor="center")
-        self.treeview.column("Precio Compra", width=100, anchor="center")
-        self.treeview.column("Precio Venta", width=100, anchor="center")
-        self.treeview.column("Precio Mayorista", width=100, anchor="center")
-        self.treeview.column("Cantidad Unidades", width=110, anchor="center")
-        self.treeview.column("Temporada Producto", width=120, anchor="center")
-        self.treeview.column("Fecha Adquisición", width=110, anchor="center")
-        self.treeview.column("Fecha Vencimiento", width=110, anchor="center")
-        self.treeview.column("Fragilidad", width=100, anchor="center")
-        self.treeview.column("Tipo Producto", width=100, anchor="center")
-        self.treeview.column("Proveedor ID", width=100, anchor="center")
-        self.treeview.column("Estado", width=70, anchor="center")
+        self.treeview_inventario.column("ID", width=25, anchor="center")
+        self.treeview_inventario.column("Nombre", width=160, anchor="center")
+        self.treeview_inventario.column("Código", width=90, anchor="center")
+        self.treeview_inventario.column("Descripción", width=200, anchor="center")
+        self.treeview_inventario.column("Categoría", width=90, anchor="center")
+        self.treeview_inventario.column("Marca", width=90, anchor="center")
+        self.treeview_inventario.column("Precio Compra", width=100, anchor="center")
+        self.treeview_inventario.column("Precio Venta", width=100, anchor="center")
+        self.treeview_inventario.column("Precio Mayorista", width=100, anchor="center")
+        self.treeview_inventario.column("Cantidad Unidades", width=110, anchor="center")
+        self.treeview_inventario.column("Temporada Producto", width=120, anchor="center")
+        self.treeview_inventario.column("Fecha Adquisición", width=110, anchor="center")
+        self.treeview_inventario.column("Fecha Vencimiento", width=110, anchor="center")
+        self.treeview_inventario.column("Fragilidad", width=100, anchor="center")
+        self.treeview_inventario.column("Tipo Producto", width=100, anchor="center")
+        self.treeview_inventario.column("Proveedor ID", width=100, anchor="center")
+        self.treeview_inventario.column("Estado", width=70, anchor="center")
         
         # Empacar el Treeview
-        self.treeview.pack(fill="both", expand=True)
+        self.treeview_inventario.pack(fill="both", expand=True)
     
     
     def filtrar_por_codigo(self):
@@ -1750,7 +1769,7 @@ class aplicacion(customtkinter.CTk):
             unidades = self.cantidad_de_productos_entrada.get()
             descuento = self.descuento_de_productos_entrada.get()
             tipo_precio = self.tipo_de_precio_entrada.get()
-        
+            print(seleccion)
             if seleccion:
                 # Tomar el primer elemento seleccionado (asumiendo selección única)
                 fila_seleccionada = seleccion[0]
@@ -1914,6 +1933,8 @@ class aplicacion(customtkinter.CTk):
         try:            
             seleccion = self.treeview_seleccionados.get_children()
             if seleccion:
+                for fila in self.treeview_seleccionados.get_children():
+                    self.treeview_seleccionados.delete(fila)
                 for fila_seleccionada in seleccion:
                     valores = self.treeview_seleccionados.item(fila_seleccionada, "values")
 

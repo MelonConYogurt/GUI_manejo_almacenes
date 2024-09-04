@@ -4,12 +4,25 @@ import random
 
 fake = Faker()
 
+categorias = [
+    'Electrónica',
+    'Ropa',
+    'Hogar',
+    'Deportes',
+    'Juguetes',
+    'Libros',
+    'Música',
+    'Salud',
+    'Comida',
+    'Belleza'
+]
+
 for _ in range(100):
     agregar_producto(
     nombre=fake.word(),
     codigo=random.randint(1000, 9999),
     descripcion=fake.sentence(),
-    categoria=fake.word(),
+    categoria = random.choice(categorias),
     marca=fake.company(),
     precio_compra=random.uniform(1.0, 100.0),
     precio_venta=random.uniform(100.0, 200.0),
