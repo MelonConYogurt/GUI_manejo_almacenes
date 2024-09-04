@@ -1,6 +1,25 @@
 Claro, aquí tienes un ejemplo de cómo podría estructurarse el archivo README para tu código, explicando sus funcionalidades principales:
 
 ---
+#Actulice algunos apartados y algunas vistas:
+
+#Pdf generados y abiertos automaticamente:
+![Screenshot 2024-09-04 175157](https://github.com/user-attachments/assets/8c0a723d-e840-46f8-b61f-3f3dff43dd6e)
+
+
+#Vistas del inventario, las ventas, los clientes, etc:
+![Screenshot 2024-09-04 175307](https://github.com/user-attachments/assets/9593b6cb-b6e1-4c73-b99e-9b6a03ba45d8)
+![Screenshot 2024-09-04 175315](https://github.com/user-attachments/assets/5cbc7f49-f8dc-4053-ae6e-fe897cb4366b)
+
+
+#Graficos automaticos de la base de datos:
+![Screenshot 2024-09-04 175300](https://github.com/user-attachments/assets/7e3b7e38-353c-4269-a09a-a03783cc3878)
+
+
+#Cambio de estilo general:
+![Screenshot 2024-09-04 175332](https://github.com/user-attachments/assets/a71aabef-4795-435e-91cd-e4e503973561)
+
+
 
 # README
 
@@ -140,6 +159,13 @@ Crea una factura basada en los productos seleccionados en el `Treeview`, incluye
     ```
 
 ---
+## bases de datos sqllite con sqlalchemy:
+
+![Screenshot 2024-09-04 175211](https://github.com/user-attachments/assets/a499c55b-6a2d-4868-bbe3-1f6ede0d0cd2)
+![Screenshot 2024-09-04 175216](https://github.com/user-attachments/assets/08576857-aff8-4718-bb7c-ddb87da5a2f6)
+
+
+
 
 Asegúrate de ajustar el README según los detalles específicos de tu proyecto y de incluir información adicional según sea necesario.
 
