@@ -5,6 +5,10 @@
 
 Este proyecto es un sistema de gestión de inventarios desarrollado en Python, utilizando **SQLAlchemy** para manejar la base de datos SQLite. El sistema permite gestionar productos, proveedores, clientes, ventas y productos seleccionados, ofreciendo funciones CRUD para todas estas entidades.
 
+## Video Demostración
+[![Video en YouTube](https://github.com/user-attachments/assets/9593b6cb-b6e1-4c73-b99e-9b6a03ba45d8)](https://youtu.be/YBmZWNpgOa8)
+
+
 ## Actualizaciones Recientes
 
 ### PDF generados y abiertos automáticamente:
